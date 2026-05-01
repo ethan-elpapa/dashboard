@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETHAN Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f4f0;
+      --bg-tertiary: #eeede8;
+      --text-primary: #1a1a18;
+      --text-secondary: #6b6a64;
+      --border: rgba(0,0,0,0.12);
+      --border-md: rgba(0,0,0,0.2);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: var(--bg-secondary);
+      border-right: 0.5px solid var(--border);
+      padding: .75rem 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sb-logo {
+      padding: 0 16px .85rem;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .sb-logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: .06em;
+    }
+
+    /* 사이드바 검색 */
+    .sb-search {
+      padding: 0 12px 8px;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 6px;
+    }
+    .sb-search input {
+      width: 100%;
+      font-size: 12px;
+      padding: 6px 10px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+      font-family: var(--font);
+    }
+    .sb-search input:focus { border-color: #378ADD; }
+
+    .sb-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .sb-group-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .sb-chevron {
+      width: 12px; height: 12px;
+      transition: transform .2s;
+      color: var(--text-secondary);
+    }
+    .sb-chevron.open { transform: rotate(90deg); }
+
+    .sb-children {
+      overflow: hidden;
+      transition: max-height .25s ease;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: all .12s;
+      position: relative;
+      text-decoration: none;
+    }
+    .sb-item:hover { background: var(--bg-primary); color: var(--text-primary); }
+    .sb-item.active { background: var(--bg-primary); color: #185FA5; font-weight: 600; }
+    .sb-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 4px; bottom: 4px;
+      width: 3px;
+      background: #378ADD;
+      border-radius: 0 2px 2px 0;
+    }
+    .sb-item.sub { padding-left: 30px; }
+    .sb-item.top { padding: 8px 16px; font-weight: 500; }
+    .sb-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: .7; }
+    .sb-item.active .sb-icon { opacity: 1; }
+    .sb-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .sb-badge.red { background: #FCEBEB; color: #A32D2D; }
+
+    .sb-spacer { flex: 1; }
+    .sb-bottom {
+      padding: 10px 16px;
+      border-top: 0.5px solid var(--border);
+    }
+    .sb-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #E6F1FB;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: #185FA5;
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      padding: 1.5rem;
+      overflow: auto;
+      min-width: 0;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .page-title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    .page-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+    .stats.five { grid-template-columns: repeat(5, 1fr); }
+    .stat {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    .stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 5px; }
+    .stat-val { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+
+    /* ── ADD BAR ── */
+    .add-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .add-bar input[type=text] {
+      flex: 1;
+      min-width: 140px;
+      font-size: 13px;
+      padding: 8px 12px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+      font-family: var(--font);
+    }
+    .add-bar input[type=text]:focus { border-color: #378ADD; }
+    .add-bar input[type=date] {
+      font-size: 12px;
+      padding: 7px 10px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font);
+      cursor: pointer;
+    }
+    .add-bar select {
+      font-size: 12px;
+      padding: 8px 10px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font);
+      cursor: pointer;
+    }
+    .add-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: var(--font);
+    }
+    .add-btn:hover { background: var(--bg-secondary); }
+
+    /* ── FILTERS ── */
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .ftab {
+      font-size: 11px;
+      padding: 4px 12px;
+      border: 0.5px solid var(--border-md);
+      border-radius: 20px;
+      cursor: pointer;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-family: var(--font);
+    }
+    .ftab.active { background: #E6F1FB; color: #185FA5; border-color: #85B7EB; }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 1.1rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .pri-badge, .cat-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+    .high { background: #FCEBEB; color: #A32D2D; }
+    .mid  { background: #FAEEDA; color: #854F0B; }
+    .low  { background: #EAF3DE; color: #3B6D11; }
+    .done-badge { background: #E6F1FB; color: #185FA5; }
+    .sec-count { font-size: 11px; color: var(--text-secondary); }
+
+    /* ── TODO ITEMS ── */
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 5px;
+      cursor: pointer;
+      transition: box-shadow .12s, transform .12s, opacity .12s;
+    }
+    .todo-item:hover { box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .todo-item.done-item { opacity: .5; }
+    .todo-item.dragging { opacity: .35; }
+    .todo-item.drag-over-top { border-top: 2px solid #378ADD; }
+    .todo-item.drag-over-bot { border-bottom: 2px solid #378ADD; }
+
+    .check-btn {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-md);
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .check-btn.checked { background: #1D9E75; border-color: #1D9E75; }
+    .check-icon { width: 10px; height: 10px; display: none; }
+    .check-btn.checked .check-icon { display: block; }
+
+    .todo-body { flex: 1; min-width: 0; }
+    .todo-text {
+      font-size: 13px;
+      color: var(--text-primary);
+      word-break: break-word;
+    }
+    .todo-item.done-item .todo-text { text-decoration: line-through; color: var(--text-secondary); }
+    .todo-memo {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .todo-date { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+    .del-btn {
+      font-size: 16px;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 2px;
+      opacity: 0;
+      font-family: var(--font);
+    }
+    .todo-item:hover .del-btn { opacity: 1; }
+
+    /* ── D-DAY 배지 ── */
+    .dday {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .dday.overdue { background: #FCEBEB; color: #A32D2D; }
+    .dday.today   { background: #FFE9D1; color: #B85B0A; }
+    .dday.soon    { background: #FFF6D6; color: #7A6309; }
+    .dday.future  { background: var(--bg-secondary); color: var(--text-secondary); }
+
+    .empty {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    /* ── 모달 ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 420px;
+      max-height: 80vh;
+      overflow: auto;
+      padding: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.15);
+    }
+    .modal-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .modal-field { margin-bottom: 12px; }
+    .modal-field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .modal-field input[type=text],
+    .modal-field input[type=date],
+    .modal-field select,
+    .modal-field textarea {
+      width: 100%;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+      font-family: var(--font);
+    }
+    .modal-field textarea { resize: vertical; min-height: 70px; }
+    .modal-field input:focus,
+    .modal-field select:focus,
+    .modal-field textarea:focus { border-color: #378ADD; }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .modal-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: var(--font);
+    }
+    .modal-btn.primary { background: #378ADD; color: #fff; border-color: #378ADD; }
+    .modal-btn:hover { opacity: .85; }
+
+    /* ── 대시보드 위젯 ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } }
+    .dash-card {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .dash-card h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* 진행률 바 */
+    .pr-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+      font-size: 12px;
+    }
+    .pr-label { width: 56px; color: var(--text-primary); flex-shrink: 0; font-weight: 500; }
+    .pr-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .pr-fill {
+      height: 100%;
+      background: linear-gradient(90deg,#85B7EB,#378ADD);
+      border-radius: 4px;
+      transition: width .25s;
+    }
+    .pr-num { font-size: 11px; color: var(--text-secondary); width: 64px; text-align: right; flex-shrink: 0; }
+
+    /* 주간 차트 */
+    .weekly-chart { width: 100%; height: 160px; display: block; }
+    .weekly-chart .bar { fill: #378ADD; transition: fill .15s; }
+    .weekly-chart .bar:hover { fill: #185FA5; }
+    .weekly-chart .label { font-size: 10px; fill: var(--text-secondary); font-family: var(--font); }
+    .weekly-chart .value { font-size: 10px; fill: var(--text-primary); font-family: var(--font); font-weight: 600; }
+
+    /* 검색 결과 */
+    .search-empty {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 30px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">ETHAN</div>
+    </div>
+
+    <!-- 검색 -->
+    <div class="sb-search">
+      <input type="text" id="search-input" placeholder="🔍 검색..." oninput="onSearchInput(this.value)">
+    </div>
+
+    <!-- 대시보드 -->
+    <div class="sb-item top active" id="nav-dashboard" onclick="goPage('dashboard',this)">
+      <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
+        <rect x="2" y="2" width="5" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="2" y="9.5" width="5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="9" y="2" width="5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="9" y="8" width="5" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      대시보드
+    </div>
+
+    <!-- 개인 업무 -->
+    <div class="sb-group-header" onclick="toggleGroup('personal')" style="margin-top:4px">
+      <span class="sb-group-label">개인 업무</span>
+      <svg id="chev-personal" class="sb-chevron open" viewBox="0 0 12 12" fill="none">
+        <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div id="group-personal" class="sb-children">
+      <div class="sb-item sub" onclick="goPage('personal-priority',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2L9.8 6.2H14.2L10.7 8.8L12 13L8 10.4L4 13L5.3 8.8L1.8 6.2H6.2L8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        우선 순위
+        <span class="sb-badge red" id="badge-personal" style="display:none">0</span>
+      </div>
+    </div>
+
+    <!-- 회사 업무 -->
+    <div class="sb-group-header" onclick="toggleGroup('company')" style="margin-top:6px">
+      <span class="sb-group-label">회사 업무</span>
+      <svg id="chev-company" class="sb-chevron open" viewBox="0 0 12 12" fill="none">
+        <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div id="group-company" class="sb-children">
+      <div class="sb-item sub" onclick="goPage('company-priority',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2L9.8 6.2H14.2L10.7 8.8L12 13L8 10.4L4 13L5.3 8.8L1.8 6.2H6.2L8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        우선 순위
+        <span class="sb-badge red" id="badge-company" style="display:none">0</span>
+      </div>
+      <div class="sb-item sub" onclick="goPage('amazon',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="7" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M4 11.5c0 0 1.5 1.5 4 1.5s4-1.5 4-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        아마존
+      </div>
+      <div class="sb-item sub" onclick="goPage('shopee',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 5h10l-1.2 6H4.2L3 5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="6" cy="13" r="1" fill="currentColor"/><circle cx="11" cy="13" r="1" fill="currentColor"/></svg>
+        쇼피
+      </div>
+      <div class="sb-item sub" onclick="goPage('tiktok',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M10 2c.5 2 2 2.5 3 2.5v2c-1 0-2.2-.4-3-1v5a4 4 0 1 1-2-3.46V9.1A2 2 0 1 0 10 11V2z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+        틱톡
+      </div>
+      <div class="sb-item sub" onclick="goPage('performa',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M2 11l3.5-4 3 2.5L12 5l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        퍼포마
+      </div>
+      <div class="sb-item sub" onclick="goPage('pd',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="2" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="8.5" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/></svg>
+        PD
+      </div>
+      <div class="sb-item sub" onclick="goPage('md',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        MD
+      </div>
+      <div class="sb-item sub" onclick="goPage('etc',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="8" r="1.2" fill="currentColor"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="8" r="1.2" fill="currentColor"/></svg>
+        기타
+      </div>
+    </div>
+
+    <div class="sb-spacer"></div>
+    <div class="sb-bottom">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="sb-avatar">E</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Ethan</div>
+          <div style="font-size:11px;color:var(--text-secondary)">개인 워크스페이스</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- 대시보드 홈 -->
+    <div id="page-dashboard" class="page active">
+      <div class="top-bar">
+        <span class="page-title">대시보드</span>
+        <span class="page-tag" style="background:#E6F1FB;color:#185FA5">홈</span>
+      </div>
+      <div class="stats five">
+        <div class="stat"><div class="stat-label">전체</div><div class="stat-val" id="d-total">0</div></div>
+        <div class="stat"><div class="stat-label">완료</div><div class="stat-val" id="d-done" style="color:#0F6E56">0</div></div>
+        <div class="stat"><div class="stat-label">진행 중</div><div class="stat-val" id="d-prog" style="color:#854F0B">0</div></div>
+        <div class="stat"><div class="stat-label">높음</div><div class="stat-val" id="d-high" style="color:#A32D2D">0</div></div>
+        <div class="stat"><div class="stat-label">마감 임박</div><div class="stat-val" id="d-soon" style="color:#B85B0A">0</div></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h3>오늘 할 일</h3>
+          <div id="d-today"></div>
+        </div>
+        <div class="dash-card">
+          <h3>카테고리별 진행률</h3>
+          <div id="d-progress"></div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <h3>주간 완료 추이 (최근 7일)</h3>
+        <svg class="weekly-chart" id="d-chart" viewBox="0 0 700 160" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- 검색 결과 -->
+    <div id="page-search" class="page">
+      <div class="top-bar">
+        <span class="page-title" id="search-title">검색 결과</span>
+        <span class="page-tag" style="background:#EEEDFE;color:#534AB7">통합 검색</span>
+      </div>
+      <div id="search-list"></div>
+    </div>
+
+    <!-- 개인 우선순위 -->
+    <div id="page-personal-priority" class="page">
+      <div class="top-bar">
+        <span class="page-title">우선 순위</span>
+        <span class="page-tag" style="background:#E1F5EE;color:#0F6E56">개인 업무</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">전체</div><div class="stat-val" id="p-total">0</div></div>
+        <div class="stat"><div class="stat-label">높음</div><div class="stat-val" id="p-high" style="color:#A32D2D">0</div></div>
+        <div class="stat"><div class="stat-label">진행 중</div><div class="stat-val" id="p-prog" style="color:#854F0B">0</div></div>
+        <div class="stat"><div class="stat-label">완료</div><div class="stat-val" id="p-done" style="color:#0F6E56">0</div></div>
+      </div>
+      <div class="add-bar">
+        <input type="text" id="p-input" placeholder="새 할 일 입력...">
+        <input type="date" id="p-due">
+        <select id="p-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select>
+        <button class="add-btn" onclick="addTodo('personal')">+ 추가</button>
+      </div>
+      <div class="filter-bar">
+        <div class="ftab active" onclick="setFilter('personal','all',this)">전체</div>
+        <div class="ftab" onclick="setFilter('personal','high',this)">높음</div>
+        <div class="ftab" onclick="setFilter('personal','mid',this)">중간</div>
+        <div class="ftab" onclick="setFilter('personal','low',this)">낮음</div>
+        <div class="ftab" onclick="setFilter('personal','done',this)">완료</div>
+      </div>
+      <div id="p-list"></div>
+    </div>
+
+    <!-- 회사 우선순위 -->
+    <div id="page-company-priority" class="page">
+      <div class="top-bar">
+        <span class="page-title">우선 순위</span>
+        <span class="page-tag" style="background:#FCEBEB;color:#A32D2D">높음 할 일만</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">총 높음</div><div class="stat-val" id="cp-total" style="color:#A32D2D">0</div></div>
+        <div class="stat"><div class="stat-label">아마존</div><div class="stat-val" id="cp-amazon">0</div></div>
+        <div class="stat"><div class="stat-label">퍼포마+PD</div><div class="stat-val" id="cp-mkt">0</div></div>
+        <div class="stat"><div class="stat-label">기타</div><div class="stat-val" id="cp-etc">0</div></div>
+      </div>
+      <div id="cp-list"></div>
+    </div>
+
+    <!-- 아마존 -->
+    <div id="page-amazon" class="page">
+      <div class="top-bar"><span class="page-title">아마존</span><span class="page-tag" style="background:#FAEEDA;color:#854F0B">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="amazon-input" placeholder="새 할 일 입력..."><input type="date" id="amazon-due"><select id="amazon-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('amazon')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('amazon','all',this)">전체</div><div class="ftab" onclick="setFilter('amazon','high',this)">높음</div><div class="ftab" onclick="setFilter('amazon','mid',this)">중간</div><div class="ftab" onclick="setFilter('amazon','low',this)">낮음</div><div class="ftab" onclick="setFilter('amazon','done',this)">완료</div></div>
+      <div id="amazon-list"></div>
+    </div>
+
+    <!-- 쇼피 -->
+    <div id="page-shopee" class="page">
+      <div class="top-bar"><span class="page-title">쇼피</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee','done',this)">완료</div></div>
+      <div id="shopee-list"></div>
+    </div>
+
+    <!-- 틱톡 -->
+    <div id="page-tiktok" class="page">
+      <div class="top-bar"><span class="page-title">틱톡</span><span class="page-tag" style="background:#EEEDFE;color:#534AB7">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="tiktok-input" placeholder="새 할 일 입력..."><input type="date" id="tiktok-due"><select id="tiktok-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('tiktok')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('tiktok','all',this)">전체</div><div class="ftab" onclick="setFilter('tiktok','high',this)">높음</div><div class="ftab" onclick="setFilter('tiktok','mid',this)">중간</div><div class="ftab" onclick="setFilter('tiktok','low',this)">낮음</div><div class="ftab" onclick="setFilter('tiktok','done',this)">완료</div></div>
+      <div id="tiktok-list"></div>
+    </div>
+
+    <!-- 퍼포마 -->
+    <div id="page-performa" class="page">
+      <div class="top-bar"><span class="page-title">퍼포마</span><span class="page-tag" style="background:#E6F1FB;color:#185FA5">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="performa-input" placeholder="새 할 일 입력..."><input type="date" id="performa-due"><select id="performa-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('performa')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('performa','all',this)">전체</div><div class="ftab" onclick="setFilter('performa','high',this)">높음</div><div class="ftab" onclick="setFilter('performa','mid',this)">중간</div><div class="ftab" onclick="setFilter('performa','low',this)">낮음</div><div class="ftab" onclick="setFilter('performa','done',this)">완료</div></div>
+      <div id="performa-list"></div>
+    </div>
+
+    <!-- PD -->
+    <div id="page-pd" class="page">
+      <div class="top-bar"><span class="page-title">PD</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="pd-input" placeholder="새 할 일 입력..."><input type="date" id="pd-due"><select id="pd-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('pd')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('pd','all',this)">전체</div><div class="ftab" onclick="setFilter('pd','high',this)">높음</div><div class="ftab" onclick="setFilter('pd','mid',this)">중간</div><div class="ftab" onclick="setFilter('pd','low',this)">낮음</div><div class="ftab" onclick="setFilter('pd','done',this)">완료</div></div>
+      <div id="pd-list"></div>
+    </div>
+
+    <!-- MD -->
+    <div id="page-md" class="page">
+      <div class="top-bar"><span class="page-title">MD</span><span class="page-tag" style="background:#FBEAF0;color:#993556">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="md-input" placeholder="새 할 일 입력..."><input type="date" id="md-due"><select id="md-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('md')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('md','all',this)">전체</div><div class="ftab" onclick="setFilter('md','high',this)">높음</div><div class="ftab" onclick="setFilter('md','mid',this)">중간</div><div class="ftab" onclick="setFilter('md','low',this)">낮음</div><div class="ftab" onclick="setFilter('md','done',this)">완료</div></div>
+      <div id="md-list"></div>
+    </div>
+
+    <!-- 기타 -->
+    <div id="page-etc" class="page">
+      <div class="top-bar"><span class="page-title">기타</span><span class="page-tag" style="background:#EEEDE8;color:#5C5A53">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="etc-input" placeholder="새 할 일 입력..."><input type="date" id="etc-due"><select id="etc-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('etc')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('etc','all',this)">전체</div><div class="ftab" onclick="setFilter('etc','high',this)">높음</div><div class="ftab" onclick="setFilter('etc','mid',this)">중간</div><div class="ftab" onclick="setFilter('etc','low',this)">낮음</div><div class="ftab" onclick="setFilter('etc','done',this)">완료</div></div>
+      <div id="etc-list"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── 수정 모달 ── -->
+<div class="modal-backdrop" id="edit-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title">할 일 수정</div>
+    <div class="modal-field">
+      <label>제목</label>
+      <input type="text" id="edit-text">
+    </div>
+    <div class="modal-field">
+      <label>메모</label>
+      <textarea id="edit-memo" placeholder="상세 설명, 메모..."></textarea>
+    </div>
+    <div class="modal-field">
+      <label>우선순위</label>
+      <select id="edit-pri">
+        <option value="high">높음</option>
+        <option value="mid">중간</option>
+        <option value="low">낮음</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>마감일</label>
+      <input type="date" id="edit-due">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeModal()">취소</button>
+      <button class="modal-btn primary" onclick="saveEdit()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── 상수 ── */
+  const SCOPES = ['personal','amazon','shopee','tiktok','performa','pd','md','etc'];
+  const CAT_LABELS = {personal:'개인',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타'};
+  const CAT_COLORS = {
+    personal:{bg:'#E1F5EE',color:'#0F6E56'},
+    amazon:  {bg:'#FAEEDA',color:'#854F0B'},
+    shopee:  {bg:'#FAECE7',color:'#993C1D'},
+    tiktok:  {bg:'#EEEDFE',color:'#534AB7'},
+    performa:{bg:'#E6F1FB',color:'#185FA5'},
+    pd:      {bg:'#E1F5EE',color:'#0F6E56'},
+    md:      {bg:'#FBEAF0',color:'#993556'},
+    etc:     {bg:'#EEEDE8',color:'#5C5A53'}
+  };
+  const COMPANY_CATS = ['amazon','shopee','tiktok','performa','pd','md','etc'];
+  const priLabel = {high:'높음', mid:'중간', low:'낮음'};
+
+  /* ── 상태 ── */
+  let data = {};
+  let filters = {};
+  let editing = null;        // {scope, id}
+  let dragSrc = null;        // {scope, id}
+  SCOPES.forEach(s => { data[s] = []; filters[s] = 'all'; });
+
+  /* ── 입력 ID 헬퍼 ── */
+  const inputId = s => s === 'personal' ? 'p-input' : s + '-input';
+  const dueId   = s => s === 'personal' ? 'p-due'   : s + '-due';
+  const priId   = s => s === 'personal' ? 'p-pri'   : s + '-pri';
+  const listId  = s => s === 'personal' ? 'p-list'  : s + '-list';
+
+  /* ── 저장/로드 + 마이그레이션 ── */
+  function save(scope) {
+    try { localStorage.setItem('ethan_todos_' + scope, JSON.stringify(data[scope])); } catch(e) {}
+  }
+  function loadAll() {
+    SCOPES.forEach(s => {
+      try {
+        const raw = localStorage.getItem('ethan_todos_' + s);
+        if (raw) data[s] = JSON.parse(raw);
+      } catch(e) { data[s] = []; }
+      // 마이그레이션: 누락 필드 채우기 + 1회 백업
+      let migrated = false;
+      data[s].forEach((t, i) => {
+        if (t.due === undefined) { t.due = null; migrated = true; }
+        if (t.memo === undefined) { t.memo = ''; migrated = true; }
+        if (t.order === undefined) { t.order = i; migrated = true; }
+        if (t.completedAt === undefined) { t.completedAt = null; migrated = true; }
+      });
+      if (migrated) {
+        try {
+          const bk = 'ethan_todos_' + s + '_backup_v1';
+          if (!localStorage.getItem(bk)) {
+            const orig = localStorage.getItem('ethan_todos_' + s);
+            if (orig) localStorage.setItem(bk, orig);
+          }
+        } catch(e) {}
+        save(s);
+      }
+    });
+    SCOPES.forEach(s => render(s));
+    renderCompanyPriority();
+    renderDashboard();
+  }
+
+  /* ── 유틸: 날짜 ── */
+  function today() {
+    const d = new Date();
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function todayISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  // YYYY.MM.DD ↔ YYYY-MM-DD
+  function dotToISO(s)  { return s ? s.replace(/\./g,'-') : ''; }
+  function isoToDot(s)  { return s ? s.replace(/-/g,'.') : ''; }
+
+  function dDay(due) {
+    if (!due) return null;
+    const [y,m,d] = due.split('.').map(Number);
+    const target = new Date(y, m-1, d);
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    target.setHours(0,0,0,0);
+    return Math.round((target - now) / 86400000);
+  }
+  function ddayBadge(due) {
+    const n = dDay(due);
+    if (n === null) return '';
+    let cls, text;
+    if (n < 0)      { cls = 'overdue'; text = `D+${-n}`; }
+    else if (n === 0) { cls = 'today'; text = 'D-day'; }
+    else if (n <= 3)  { cls = 'soon';  text = `D-${n}`; }
+    else              { cls = 'future';text = `D-${n}`; }
+    return `<span class="dday ${cls}">${text}</span>`;
+  }
+
+  /* ── 엔터 키 바인딩 ── */
+  SCOPES.forEach(s => {
+    const el = document.getElementById(inputId(s));
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(s); });
+  });
+
+  /* ── CRUD ── */
+  function addTodo(scope) {
+    const input = document.getElementById(inputId(scope));
+    const text  = input.value.trim();
+    if (!text) return;
+    const pri = document.getElementById(priId(scope)).value;
+    const dueRaw = document.getElementById(dueId(scope)).value;
+    const due = dueRaw ? isoToDot(dueRaw) : null;
+    const maxOrder = data[scope].reduce((m,t) => Math.max(m, t.order || 0), -1);
+    data[scope].push({
+      id: Date.now(),
+      text, pri, done: false,
+      date: today(),
+      due, memo: '', order: maxOrder + 1,
+      completedAt: null
+    });
+    input.value = '';
+    document.getElementById(dueId(scope)).value = '';
+    save(scope);
+    afterChange(scope);
+  }
+
+  function toggleDone(scope, id, ev) {
+    if (ev) ev.stopPropagation();
+    const t = data[scope].find(t => t.id === id);
+    if (t) {
+      t.done = !t.done;
+      t.completedAt = t.done ? today() : null;
+    }
+    save(scope);
+    afterChange(scope);
+  }
+
+  function deleteTodo(scope, id, ev) {
+    if (ev) ev.stopPropagation();
+    data[scope] = data[scope].filter(t => t.id !== id);
+    save(scope);
+    afterChange(scope);
+  }
+
+  function afterChange(scope) {
+    render(scope);
+    if (COMPANY_CATS.includes(scope)) renderCompanyPriority();
+    renderDashboard();
+    if (currentSearchQuery) doSearch(currentSearchQuery);
+  }
+
+  /* ── 수정 모달 ── */
+  function openEdit(scope, id, ev) {
+    if (ev) ev.stopPropagation();
+    const t = data[scope].find(t => t.id === id);
+    if (!t) return;
+    editing = { scope, id };
+    document.getElementById('edit-text').value = t.text;
+    document.getElementById('edit-memo').value = t.memo || '';
+    document.getElementById('edit-pri').value  = t.pri;
+    document.getElementById('edit-due').value  = t.due ? dotToISO(t.due) : '';
+    document.getElementById('edit-modal').classList.add('open');
+    setTimeout(() => document.getElementById('edit-text').focus(), 30);
+  }
+  function closeModal() {
+    document.getElementById('edit-modal').classList.remove('open');
+    editing = null;
+  }
+  function saveEdit() {
+    if (!editing) return;
+    const t = data[editing.scope].find(t => t.id === editing.id);
+    if (!t) { closeModal(); return; }
+    const newText = document.getElementById('edit-text').value.trim();
+    if (!newText) return;
+    t.text = newText;
+    t.memo = document.getElementById('edit-memo').value.trim();
+    t.pri  = document.getElementById('edit-pri').value;
+    const dueRaw = document.getElementById('edit-due').value;
+    t.due = dueRaw ? isoToDot(dueRaw) : null;
+    save(editing.scope);
+    const scope = editing.scope;
+    closeModal();
+    afterChange(scope);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && editing) closeModal();
+    if (e.key === 'Enter' && editing && (e.metaKey || e.ctrlKey)) saveEdit();
+  });
+
+  /* ── 필터 ── */
+  function setFilter(scope, f, el) {
+    filters[scope] = f;
+    el.closest('.filter-bar').querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    render(scope);
+  }
+
+  /* ── 사이드바 ── */
+  function toggleGroup(id) {
+    const c = document.getElementById('group-' + id);
+    const v = document.getElementById('chev-' + id);
+    const o = v.classList.contains('open');
+    c.style.maxHeight = o ? '0' : c.scrollHeight + 'px';
+    v.classList.toggle('open', !o);
+  }
+  function initGroups() {
+    ['personal','company'].forEach(id => {
+      const el = document.getElementById('group-' + id);
+      el.style.maxHeight = el.scrollHeight + 'px';
+    });
+  }
+  function goPage(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (el) el.classList.add('active');
+  }
+
+  /* ── 드래그 정렬 ── */
+  function onDragStart(ev, scope, id) {
+    dragSrc = { scope, id };
+    ev.currentTarget.classList.add('dragging');
+    ev.dataTransfer.effectAllowed = 'move';
+    try { ev.dataTransfer.setData('text/plain', id); } catch(e) {}
+  }
+  function onDragEnd(ev) {
+    ev.currentTarget.classList.remove('dragging');
+    document.querySelectorAll('.todo-item').forEach(el => {
+      el.classList.remove('drag-over-top','drag-over-bot');
+    });
+    dragSrc = null;
+  }
+  function onDragOverItem(ev) {
+    if (!dragSrc) return;
+    ev.preventDefault();
+    const el = ev.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const isTop = (ev.clientY - rect.top) < rect.height / 2;
+    document.querySelectorAll('.todo-item').forEach(x => {
+      x.classList.remove('drag-over-top','drag-over-bot');
+    });
+    el.classList.add(isTop ? 'drag-over-top' : 'drag-over-bot');
+  }
+  function onDropItem(ev, scope, targetId, targetPri) {
+    if (!dragSrc) return;
+    ev.preventDefault();
+    if (dragSrc.scope !== scope) { onDragEnd(ev); return; } // 다른 카테고리로는 이동 안 함
+    const el = ev.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const isTop = (ev.clientY - rect.top) < rect.height / 2;
+    reorder(scope, dragSrc.id, targetId, isTop, targetPri);
+    onDragEnd(ev);
+  }
+  function onDropSection(ev, scope, sectionPri) {
+    if (!dragSrc) return;
+    ev.preventDefault();
+    if (dragSrc.scope !== scope) { onDragEnd(ev); return; }
+    // 빈 섹션이거나 항목 사이 외 영역 — 해당 섹션 끝에 추가
+    reorder(scope, dragSrc.id, null, false, sectionPri);
+    onDragEnd(ev);
+  }
+  function onDragOverSection(ev) {
+    if (dragSrc) ev.preventDefault();
+  }
+
+  function reorder(scope, srcId, targetId, insertBefore, targetPri) {
+    const arr = data[scope];
+    const srcIdx = arr.findIndex(t => t.id === srcId);
+    if (srcIdx < 0) return;
+    const src = arr[srcIdx];
+    arr.splice(srcIdx, 1);
+    if (targetPri && src.pri !== targetPri) src.pri = targetPri;
+    if (targetId == null) {
+      arr.push(src);
+    } else {
+      const tIdx = arr.findIndex(t => t.id === targetId);
+      const insertAt = tIdx < 0 ? arr.length : (insertBefore ? tIdx : tIdx + 1);
+      arr.splice(insertAt, 0, src);
+    }
+    arr.forEach((t, i) => t.order = i);
+    save(scope);
+    afterChange(scope);
+  }
+
+  /* ── 검색 ── */
+  let currentSearchQuery = '';
+  let searchDebounce = null;
+  function onSearchInput(q) {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      currentSearchQuery = q.trim();
+      if (currentSearchQuery) {
+        goPage('search', null);
+        document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+        doSearch(currentSearchQuery);
+      } else if (document.getElementById('page-search').classList.contains('active')) {
+        goPage('dashboard', document.getElementById('nav-dashboard'));
+      }
+    }, 150);
+  }
+  function doSearch(q) {
+    const wrap = document.getElementById('search-list');
+    document.getElementById('search-title').textContent = `"${q}" 검색 결과`;
+    const ql = q.toLowerCase();
+    const results = [];
+    SCOPES.forEach(scope => {
+      data[scope].forEach(t => {
+        const inText = (t.text || '').toLowerCase().includes(ql);
+        const inMemo = (t.memo || '').toLowerCase().includes(ql);
+        if (inText || inMemo) results.push({ ...t, scope });
+      });
+    });
+    if (!results.length) {
+      wrap.innerHTML = `<div class="search-empty">"${q}" 와 일치하는 할 일이 없어요.</div>`;
+      return;
+    }
+    // scope별 그룹
+    wrap.innerHTML = '';
+    SCOPES.forEach(scope => {
+      const items = results.filter(r => r.scope === scope);
+      if (!items.length) return;
+      const c = CAT_COLORS[scope];
+      const sec = document.createElement('div');
+      sec.className = 'section';
+      sec.innerHTML = `<div class="section-header"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${CAT_LABELS[scope]}</span><span class="sec-count">${items.length}개</span></div>`;
+      items.forEach(t => sec.appendChild(buildTodoItem(t, scope, false)));
+      wrap.appendChild(sec);
+    });
+  }
+
+  /* ── 할 일 element 빌더 ── */
+  function buildTodoItem(t, scope, draggable) {
+    const div = document.createElement('div');
+    div.className = 'todo-item' + (t.done ? ' done-item' : '');
+    div.dataset.id = t.id;
+    div.dataset.pri = t.pri;
+    if (draggable) {
+      div.draggable = true;
+      div.addEventListener('dragstart', e => onDragStart(e, scope, t.id));
+      div.addEventListener('dragend',   e => onDragEnd(e));
+      div.addEventListener('dragover',  e => onDragOverItem(e));
+      div.addEventListener('drop',      e => onDropItem(e, scope, t.id, t.pri));
+    }
+    div.onclick = (e) => openEdit(scope, t.id, e);
+    const memoLine = t.memo ? `<div class="todo-memo">${escapeHtml(t.memo)}</div>` : '';
+    div.innerHTML = `
+      <button class="check-btn ${t.done ? 'checked' : ''}" onclick="toggleDone('${scope}',${t.id},event)">
+        <svg class="check-icon" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="todo-body">
+        <div class="todo-text">${escapeHtml(t.text)}</div>
+        ${memoLine}
+      </div>
+      ${t.due && !t.done ? ddayBadge(t.due) : ''}
+      <span class="todo-date">${t.due ? t.due : t.date}</span>
+      <button class="del-btn" onclick="deleteTodo('${scope}',${t.id},event)">×</button>
+    `;
+    return div;
+  }
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  /* ── 회사 우선순위 렌더 ── */
+  function renderCompanyPriority() {
+    const allHigh = COMPANY_CATS.flatMap(cat =>
+      data[cat].filter(t => t.pri === 'high' && !t.done).map(t => ({...t, cat}))
+    );
+    document.getElementById('cp-total').textContent  = allHigh.length;
+    document.getElementById('cp-amazon').textContent = allHigh.filter(t => t.cat === 'amazon').length;
+    document.getElementById('cp-mkt').textContent    = allHigh.filter(t => t.cat === 'performa' || t.cat === 'pd').length;
+    document.getElementById('cp-etc').textContent    = allHigh.filter(t => t.cat === 'shopee' || t.cat === 'tiktok' || t.cat === 'md').length;
+
+    const badge = document.getElementById('badge-company');
+    badge.textContent = allHigh.length;
+    badge.style.display = allHigh.length > 0 ? '' : 'none';
+
+    const wrap = document.getElementById('cp-list');
+    wrap.innerHTML = '';
+    if (!allHigh.length) { wrap.innerHTML = '<div class="empty">모든 카테고리에 높음 할 일이 없어요.</div>'; return; }
+
+    COMPANY_CATS.forEach(cat => {
+      const items = data[cat].filter(t => t.pri === 'high' && !t.done)
+                             .sort((a,b) => (a.order||0) - (b.order||0));
+      if (!items.length) return;
+      const c = CAT_COLORS[cat];
+      const sec = document.createElement('div');
+      sec.className = 'section';
+      sec.innerHTML = `<div class="section-header"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${CAT_LABELS[cat]}</span><span class="sec-count">${items.length}개</span></div>`;
+      items.forEach(t => sec.appendChild(buildTodoItem(t, cat, false)));
+      wrap.appendChild(sec);
+    });
+  }
+
+  /* ── 일반 렌더 ── */
+  function render(scope) {
+    if (scope === 'personal') {
+      const todos = data[scope];
+      const high  = todos.filter(t => t.pri === 'high' && !t.done).length;
+      document.getElementById('p-total').textContent = todos.length;
+      document.getElementById('p-high').textContent  = high;
+      document.getElementById('p-prog').textContent  = todos.filter(t => !t.done).length;
+      document.getElementById('p-done').textContent  = todos.filter(t => t.done).length;
+      const badge = document.getElementById('badge-personal');
+      badge.textContent = high;
+      badge.style.display = high > 0 ? '' : 'none';
+    }
+
+    const wrap = document.getElementById(listId(scope));
+    if (!wrap) return;
+    wrap.innerHTML = '';
+
+    const todos = data[scope].slice().sort((a,b) => (a.order||0) - (b.order||0));
+    const f     = filters[scope];
+    const dragEnabled = (f === 'all'); // "전체" 필터일 때만 드래그 활성
+
+    if (f === 'done') {
+      renderSection(wrap, todos.filter(t => t.done), scope, '완료', 'done-badge', false, null);
+      return;
+    }
+
+    const priorities = f === 'all' ? ['high','mid','low'] : [f];
+    let any = false;
+    priorities.forEach(pri => {
+      const items = todos.filter(t => t.pri === pri && !t.done);
+      if (!items.length && !dragEnabled) return;
+      any = any || items.length > 0;
+      renderSection(wrap, items, scope, priLabel[pri], pri, dragEnabled, pri);
+    });
+
+    if (f === 'all') {
+      const done = todos.filter(t => t.done);
+      if (done.length) renderSection(wrap, done, scope, '완료', 'done-badge', false, null);
+    }
+
+    if (!todos.length) { wrap.innerHTML = '<div class="empty">+ 추가 버튼으로 첫 번째 할 일을 입력해보세요.</div>'; return; }
+    if (!any && f !== 'all' && f !== 'done') wrap.innerHTML = '<div class="empty">해당 우선순위의 할 일이 없어요.</div>';
+  }
+
+  function renderSection(wrap, items, scope, label, priClass, draggable, dropPri) {
+    if (!items.length && !draggable) return;
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.innerHTML = `<div class="section-header"><span class="pri-badge ${priClass}">${label}</span><span class="sec-count">${items.length}개</span></div>`;
+    if (draggable && dropPri) {
+      sec.addEventListener('dragover', onDragOverSection);
+      sec.addEventListener('drop', e => onDropSection(e, scope, dropPri));
+    }
+    items.forEach(t => sec.appendChild(buildTodoItem(t, scope, draggable)));
+    wrap.appendChild(sec);
+  }
+
+  /* ── 대시보드 ── */
+  function renderDashboard() {
+    // 요약
+    let total=0, done=0, prog=0, high=0, soon=0;
+    SCOPES.forEach(s => {
+      data[s].forEach(t => {
+        total++;
+        if (t.done) done++;
+        else {
+          prog++;
+          if (t.pri === 'high') high++;
+          const d = dDay(t.due);
+          if (d !== null && d <= 3) soon++; // 오늘/지난/3일 이내
+        }
+      });
+    });
+    document.getElementById('d-total').textContent = total;
+    document.getElementById('d-done').textContent  = done;
+    document.getElementById('d-prog').textContent  = prog;
+    document.getElementById('d-high').textContent  = high;
+    document.getElementById('d-soon').textContent  = soon;
+
+    // 오늘 할 일: 마감일이 오늘이거나 지난 미완료
+    const todayList = document.getElementById('d-today');
+    todayList.innerHTML = '';
+    const todays = [];
+    SCOPES.forEach(s => {
+      data[s].forEach(t => {
+        if (t.done) return;
+        const d = dDay(t.due);
+        if (d !== null && d <= 0) todays.push({...t, scope: s});
+      });
+    });
+    todays.sort((a,b) => (dDay(a.due)||0) - (dDay(b.due)||0));
+    if (!todays.length) {
+      todayList.innerHTML = '<div class="empty" style="padding:12px 0">오늘 마감인 할 일이 없어요.</div>';
+    } else {
+      todays.slice(0, 8).forEach(t => {
+        const c = CAT_COLORS[t.scope];
+        const div = buildTodoItem(t, t.scope, false);
+        // 카테고리 배지를 todo-text 옆에 추가
+        const body = div.querySelector('.todo-body');
+        const cat = document.createElement('span');
+        cat.className = 'cat-badge';
+        cat.style.cssText = `background:${c.bg};color:${c.color};margin-right:6px;display:inline-block;vertical-align:middle`;
+        cat.textContent = CAT_LABELS[t.scope];
+        body.querySelector('.todo-text').prepend(cat);
+        todayList.appendChild(div);
+      });
+    }
+
+    // 카테고리별 진행률
+    const prWrap = document.getElementById('d-progress');
+    prWrap.innerHTML = '';
+    SCOPES.forEach(s => {
+      const total = data[s].length;
+      const done  = data[s].filter(t => t.done).length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      const row = document.createElement('div');
+      row.className = 'pr-row';
+      row.innerHTML = `
+        <div class="pr-label">${CAT_LABELS[s]}</div>
+        <div class="pr-bar"><div class="pr-fill" style="width:${pct}%"></div></div>
+        <div class="pr-num">${done}/${total} (${pct}%)</div>
+      `;
+      prWrap.appendChild(row);
+    });
+
+    // 주간 차트
+    renderWeeklyChart();
+  }
+
+  function renderWeeklyChart() {
+    const svg = document.getElementById('d-chart');
+    svg.innerHTML = '';
+    const W = 700, H = 160, P = 24;
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+      const lbl = `${d.getMonth()+1}/${d.getDate()}`;
+      days.push({ key, lbl, count: 0 });
+    }
+    SCOPES.forEach(s => {
+      data[s].forEach(t => {
+        if (!t.completedAt) return;
+        const day = days.find(d => d.key === t.completedAt);
+        if (day) day.count++;
+      });
+    });
+    const max = Math.max(1, ...days.map(d => d.count));
+    const barW = (W - P*2) / days.length * 0.6;
+    const slot = (W - P*2) / days.length;
+    days.forEach((d, i) => {
+      const x = P + slot*i + (slot - barW)/2;
+      const h = (H - P*2) * (d.count / max);
+      const y = H - P - h;
+      svg.innerHTML += `<rect class="bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"></rect>`;
+      if (d.count > 0) {
+        svg.innerHTML += `<text class="value" x="${x + barW/2}" y="${y - 4}" text-anchor="middle">${d.count}</text>`;
+      }
+      svg.innerHTML += `<text class="label" x="${x + barW/2}" y="${H - 6}" text-anchor="middle">${d.lbl}</text>`;
+    });
+  }
+
+  /* ── 초기화 ── */
+  loadAll();
+  setTimeout(initGroups, 50);
+</script>
+</body>
+</html>
