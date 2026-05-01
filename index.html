@@ -674,6 +674,10 @@
         우선 순위
         <span class="sb-badge red" id="badge-personal" style="display:none">0</span>
       </div>
+      <div class="sb-item sub" onclick="goPage('neaf',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2C5 2 3 4 3 7c0 3 2.5 5 5 7 2.5-2 5-4 5-7 0-3-2-5-5-5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 7l1.5 1.5L10 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Neaf
+      </div>
     </div>
 
     <!-- 회사 업무 -->
@@ -803,6 +807,14 @@
       <div id="p-list"></div>
     </div>
 
+    <!-- Neaf -->
+    <div id="page-neaf" class="page">
+      <div class="top-bar"><span class="page-title">Neaf</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">개인 업무</span></div>
+      <div class="add-bar"><input type="text" id="neaf-input" placeholder="새 할 일 입력..."><input type="date" id="neaf-due"><select id="neaf-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('neaf')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('neaf','all',this)">전체</div><div class="ftab" onclick="setFilter('neaf','high',this)">높음</div><div class="ftab" onclick="setFilter('neaf','mid',this)">중간</div><div class="ftab" onclick="setFilter('neaf','low',this)">낮음</div><div class="ftab" onclick="setFilter('neaf','done',this)">완료</div></div>
+      <div id="neaf-list"></div>
+    </div>
+
     <!-- 회사 우선순위 -->
     <div id="page-company-priority" class="page">
       <div class="top-bar">
@@ -910,10 +922,11 @@
 
 <script>
   /* ── 상수 ── */
-  const SCOPES = ['personal','amazon','shopee','tiktok','performa','pd','md','etc'];
-  const CAT_LABELS = {personal:'개인',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타'};
+  const SCOPES = ['personal','neaf','amazon','shopee','tiktok','performa','pd','md','etc'];
+  const CAT_LABELS = {personal:'개인',neaf:'Neaf',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타'};
   const CAT_COLORS = {
     personal:{bg:'#E1F5EE',color:'#0F6E56'},
+    neaf:    {bg:'#E8F5E0',color:'#3B6D11'},
     amazon:  {bg:'#FAEEDA',color:'#854F0B'},
     shopee:  {bg:'#FAECE7',color:'#993C1D'},
     tiktok:  {bg:'#EEEDFE',color:'#534AB7'},
