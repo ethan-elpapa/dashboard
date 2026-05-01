@@ -508,9 +508,135 @@
       padding: 30px 0;
       text-align: center;
     }
+
+    /* ── 인증 화면 ── */
+    body.locked .layout { display: none; }
+    body:not(.locked) .auth-overlay { display: none; }
+
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 200;
+    }
+    .auth-card {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    }
+    .auth-logo {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-align: center;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    .auth-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .auth-field { margin-bottom: 11px; }
+    .auth-field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .auth-field input {
+      width: 100%;
+      font-size: 13px;
+      padding: 9px 12px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+      font-family: var(--font);
+    }
+    .auth-field input:focus { border-color: #378ADD; }
+    .auth-btn {
+      width: 100%;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: #378ADD;
+      color: #fff;
+      cursor: pointer;
+      font-family: var(--font);
+    }
+    .auth-btn:hover { background: #185FA5; }
+    .auth-err {
+      font-size: 12px;
+      color: #A32D2D;
+      text-align: center;
+      margin-top: 10px;
+      min-height: 16px;
+    }
+    .auth-foot {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .auth-foot a { color: #378ADD; cursor: pointer; text-decoration: none; }
+    .auth-foot a:hover { text-decoration: underline; }
+
+    /* 로그아웃 버튼 */
+    .logout-btn {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      margin-left: auto;
+      border-radius: 6px;
+      font-family: var(--font);
+      flex-shrink: 0;
+    }
+    .logout-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
   </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- ── 인증 화면 ── -->
+<div class="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">ETHAN</div>
+    <div class="auth-sub" id="auth-sub">로그인</div>
+    <div class="auth-field">
+      <label>아이디</label>
+      <input type="text" id="auth-id" autocomplete="username">
+    </div>
+    <div class="auth-field">
+      <label>비밀번호</label>
+      <input type="password" id="auth-pw" autocomplete="current-password">
+    </div>
+    <div class="auth-field" id="auth-pw2-field" style="display:none">
+      <label>비밀번호 확인</label>
+      <input type="password" id="auth-pw2">
+    </div>
+    <button class="auth-btn" id="auth-btn" onclick="authSubmit()">로그인</button>
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-foot" id="auth-foot"></div>
+  </div>
+</div>
+
 <div class="layout">
 
   <!-- ── SIDEBAR ── -->
@@ -596,11 +722,12 @@
     <div class="sb-spacer"></div>
     <div class="sb-bottom">
       <div style="display:flex;align-items:center;gap:8px">
-        <div class="sb-avatar">E</div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Ethan</div>
+        <div class="sb-avatar" id="sb-avatar">E</div>
+        <div style="min-width:0;flex:1">
+          <div style="font-size:12px;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="sb-username">Ethan</div>
           <div style="font-size:11px;color:var(--text-secondary)">개인 워크스페이스</div>
         </div>
+        <button class="logout-btn" onclick="logout()" title="로그아웃">⎋</button>
       </div>
     </div>
   </nav>
@@ -1340,9 +1467,110 @@
     });
   }
 
+  /* ── 인증 ── */
+  const AUTH_KEY = 'ethan_auth_v1';
+  const SESSION_KEY = 'ethan_session_v1';
+  let isCreating = false;
+
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function makeSalt() {
+    return Array.from(crypto.getRandomValues(new Uint8Array(16)))
+      .map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function getAuth() {
+    try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e) { return null; }
+  }
+
+  function setupAuth() {
+    const auth = getAuth();
+    isCreating = !auth;
+    document.getElementById('auth-sub').textContent = isCreating ? '계정 생성 (첫 방문)' : '로그인';
+    document.getElementById('auth-btn').textContent = isCreating ? '계정 생성' : '로그인';
+    document.getElementById('auth-pw2-field').style.display = isCreating ? '' : 'none';
+    document.getElementById('auth-foot').innerHTML = isCreating
+      ? '아이디와 비밀번호를 설정하면 다음부터 입력해야 합니다.'
+      : '비밀번호를 잊으셨나요? <a onclick="resetAuth()">초기화 (모든 데이터 삭제)</a>';
+    document.getElementById('auth-id').value = '';
+    document.getElementById('auth-pw').value = '';
+    document.getElementById('auth-pw2').value = '';
+    document.getElementById('auth-err').textContent = '';
+    setTimeout(() => document.getElementById('auth-id').focus(), 50);
+  }
+
+  async function authSubmit() {
+    const id = document.getElementById('auth-id').value.trim();
+    const pw = document.getElementById('auth-pw').value;
+    const err = document.getElementById('auth-err');
+    err.textContent = '';
+    if (!id || !pw) { err.textContent = '아이디와 비밀번호를 입력하세요.'; return; }
+
+    if (isCreating) {
+      const pw2 = document.getElementById('auth-pw2').value;
+      if (pw.length < 4) { err.textContent = '비밀번호는 4자 이상으로 설정하세요.'; return; }
+      if (pw !== pw2) { err.textContent = '비밀번호가 일치하지 않습니다.'; return; }
+      const salt = makeSalt();
+      const hash = await sha256(salt + ':' + pw);
+      localStorage.setItem(AUTH_KEY, JSON.stringify({ id, salt, hash }));
+      sessionStorage.setItem(SESSION_KEY, '1');
+      unlock(id);
+      return;
+    }
+
+    const auth = getAuth();
+    if (!auth || auth.id !== id) { err.textContent = '아이디 또는 비밀번호가 잘못되었습니다.'; return; }
+    const hash = await sha256(auth.salt + ':' + pw);
+    if (hash !== auth.hash) { err.textContent = '아이디 또는 비밀번호가 잘못되었습니다.'; return; }
+    sessionStorage.setItem(SESSION_KEY, '1');
+    unlock(id);
+  }
+
+  function unlock(username) {
+    document.body.classList.remove('locked');
+    const u = username || (getAuth() && getAuth().id) || 'Ethan';
+    document.getElementById('sb-username').textContent = u;
+    document.getElementById('sb-avatar').textContent = u.charAt(0).toUpperCase();
+    loadAll();
+    setTimeout(initGroups, 50);
+  }
+
+  function logout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    document.body.classList.add('locked');
+    setupAuth();
+  }
+
+  function resetAuth() {
+    if (!confirm('정말 초기화하시겠습니까?\n계정과 모든 할 일 데이터가 삭제됩니다.')) return;
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('ethan_')) localStorage.removeItem(k);
+    }
+    sessionStorage.removeItem(SESSION_KEY);
+    SCOPES.forEach(s => { data[s] = []; });
+    setupAuth();
+  }
+
+  // Enter 키로 제출
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.body.classList.contains('locked')) {
+      e.preventDefault();
+      authSubmit();
+    }
+  });
+
   /* ── 초기화 ── */
-  loadAll();
-  setTimeout(initGroups, 50);
+  function init() {
+    if (sessionStorage.getItem(SESSION_KEY) === '1' && getAuth()) {
+      unlock();
+    } else {
+      document.body.classList.add('locked');
+      setupAuth();
+    }
+  }
+  init();
 </script>
 </body>
 </html>
