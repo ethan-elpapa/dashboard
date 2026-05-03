@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ETHAN Dashboard</title>
+  <title>이보슬 Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -617,7 +617,7 @@
 <!-- ── 인증 화면 ── -->
 <div class="auth-overlay">
   <div class="auth-card">
-    <div class="auth-logo">ETHAN</div>
+    <div class="auth-logo">이보슬</div>
     <div class="auth-sub" id="auth-sub">로그인</div>
     <div class="auth-field">
       <label>아이디</label>
@@ -642,7 +642,7 @@
   <!-- ── SIDEBAR ── -->
   <nav class="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-text">ETHAN</div>
+      <div class="sb-logo-text">이보슬</div>
     </div>
 
     <!-- 검색 -->
@@ -661,25 +661,6 @@
       대시보드
     </div>
 
-    <!-- 개인 업무 -->
-    <div class="sb-group-header" onclick="toggleGroup('personal')" style="margin-top:4px">
-      <span class="sb-group-label">개인 업무</span>
-      <svg id="chev-personal" class="sb-chevron open" viewBox="0 0 12 12" fill="none">
-        <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div id="group-personal" class="sb-children">
-      <div class="sb-item sub" onclick="goPage('personal-priority',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2L9.8 6.2H14.2L10.7 8.8L12 13L8 10.4L4 13L5.3 8.8L1.8 6.2H6.2L8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-        우선 순위
-        <span class="sb-badge red" id="badge-personal" style="display:none">0</span>
-      </div>
-      <div class="sb-item sub" onclick="goPage('neaf',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2C5 2 3 4 3 7c0 3 2.5 5 5 7 2.5-2 5-4 5-7 0-3-2-5-5-5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 7l1.5 1.5L10 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Neaf
-      </div>
-    </div>
-
     <!-- 회사 업무 -->
     <div class="sb-group-header" onclick="toggleGroup('company')" style="margin-top:6px">
       <span class="sb-group-label">회사 업무</span>
@@ -693,63 +674,27 @@
         우선 순위
         <span class="sb-badge red" id="badge-company" style="display:none">0</span>
       </div>
-      <div class="sb-item sub" onclick="goPage('amazon',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="7" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M4 11.5c0 0 1.5 1.5 4 1.5s4-1.5 4-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        아마존
+      <div class="sb-item sub" onclick="goPage('shopee-sg',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 5h10l-1.2 6H4.2L3 5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="6" cy="13" r="1" fill="currentColor"/><circle cx="11" cy="13" r="1" fill="currentColor"/></svg>
+        Shopee SG
+      </div>
+      <div class="sb-item sub" onclick="goPage('shopee-my',this)">
+        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 5h10l-1.2 6H4.2L3 5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="6" cy="13" r="1" fill="currentColor"/><circle cx="11" cy="13" r="1" fill="currentColor"/></svg>
+        Shopee MY
       </div>
       <div class="sb-item sub" onclick="goPage('shopee',this)">
         <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 5h10l-1.2 6H4.2L3 5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="6" cy="13" r="1" fill="currentColor"/><circle cx="11" cy="13" r="1" fill="currentColor"/></svg>
-        쇼피
-      </div>
-      <div class="sb-item sub" onclick="goPage('tiktok',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M10 2c.5 2 2 2.5 3 2.5v2c-1 0-2.2-.4-3-1v5a4 4 0 1 1-2-3.46V9.1A2 2 0 1 0 10 11V2z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
-        틱톡
-      </div>
-      <div class="sb-item sub" onclick="goPage('performa',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M2 11l3.5-4 3 2.5L12 5l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        퍼포마
-      </div>
-      <div class="sb-item sub" onclick="goPage('pd',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="2" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="8.5" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/></svg>
-        PD
-      </div>
-      <div class="sb-item sub" onclick="goPage('md',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-        MD
-      </div>
-      <div class="sb-item sub" onclick="goPage('etc',this)">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="8" r="1.2" fill="currentColor"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="8" r="1.2" fill="currentColor"/></svg>
-        기타
-      </div>
-    </div>
-
-    <!-- 팀원 -->
-    <div class="sb-group-header" onclick="toggleGroup('team')" style="margin-top:6px">
-      <span class="sb-group-label">팀원</span>
-      <svg id="chev-team" class="sb-chevron open" viewBox="0 0 12 12" fill="none">
-        <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div id="group-team" class="sb-children">
-      <div class="sb-item sub" onclick="window.open('ongicheol.html','_blank')" title="새 탭에서 열기">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        온기철
-        <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="sb-item sub" onclick="window.open('boseul.html','_blank')" title="새 탭에서 열기">
-        <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        이보슬
-        <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Shopee
       </div>
     </div>
 
     <div class="sb-spacer"></div>
     <div class="sb-bottom">
       <div style="display:flex;align-items:center;gap:8px">
-        <div class="sb-avatar" id="sb-avatar">E</div>
+        <div class="sb-avatar" id="sb-avatar">이</div>
         <div style="min-width:0;flex:1">
-          <div style="font-size:12px;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="sb-username">Ethan</div>
-          <div style="font-size:11px;color:var(--text-secondary)">개인 워크스페이스</div>
+          <div style="font-size:12px;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="sb-username">이보슬</div>
+          <div style="font-size:11px;color:var(--text-secondary)">팀원 워크스페이스</div>
         </div>
         <button class="logout-btn" onclick="logout()" title="로그아웃">⎋</button>
       </div>
@@ -799,42 +744,6 @@
       <div id="search-list"></div>
     </div>
 
-    <!-- 개인 우선순위 -->
-    <div id="page-personal-priority" class="page">
-      <div class="top-bar">
-        <span class="page-title">우선 순위</span>
-        <span class="page-tag" style="background:#E1F5EE;color:#0F6E56">개인 업무</span>
-      </div>
-      <div class="stats">
-        <div class="stat"><div class="stat-label">전체</div><div class="stat-val" id="p-total">0</div></div>
-        <div class="stat"><div class="stat-label">높음</div><div class="stat-val" id="p-high" style="color:#A32D2D">0</div></div>
-        <div class="stat"><div class="stat-label">진행 중</div><div class="stat-val" id="p-prog" style="color:#854F0B">0</div></div>
-        <div class="stat"><div class="stat-label">완료</div><div class="stat-val" id="p-done" style="color:#0F6E56">0</div></div>
-      </div>
-      <div class="add-bar">
-        <input type="text" id="p-input" placeholder="새 할 일 입력...">
-        <input type="date" id="p-due">
-        <select id="p-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select>
-        <button class="add-btn" onclick="addTodo('personal')">+ 추가</button>
-      </div>
-      <div class="filter-bar">
-        <div class="ftab active" onclick="setFilter('personal','all',this)">전체</div>
-        <div class="ftab" onclick="setFilter('personal','high',this)">높음</div>
-        <div class="ftab" onclick="setFilter('personal','mid',this)">중간</div>
-        <div class="ftab" onclick="setFilter('personal','low',this)">낮음</div>
-        <div class="ftab" onclick="setFilter('personal','done',this)">완료</div>
-      </div>
-      <div id="p-list"></div>
-    </div>
-
-    <!-- Neaf -->
-    <div id="page-neaf" class="page">
-      <div class="top-bar"><span class="page-title">Neaf</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">개인 업무</span></div>
-      <div class="add-bar"><input type="text" id="neaf-input" placeholder="새 할 일 입력..."><input type="date" id="neaf-due"><select id="neaf-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('neaf')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('neaf','all',this)">전체</div><div class="ftab" onclick="setFilter('neaf','high',this)">높음</div><div class="ftab" onclick="setFilter('neaf','mid',this)">중간</div><div class="ftab" onclick="setFilter('neaf','low',this)">낮음</div><div class="ftab" onclick="setFilter('neaf','done',this)">완료</div></div>
-      <div id="neaf-list"></div>
-    </div>
-
     <!-- 회사 우선순위 -->
     <div id="page-company-priority" class="page">
       <div class="top-bar">
@@ -843,67 +752,35 @@
       </div>
       <div class="stats">
         <div class="stat"><div class="stat-label">총 높음</div><div class="stat-val" id="cp-total" style="color:#A32D2D">0</div></div>
-        <div class="stat"><div class="stat-label">아마존</div><div class="stat-val" id="cp-amazon">0</div></div>
-        <div class="stat"><div class="stat-label">퍼포마+PD</div><div class="stat-val" id="cp-mkt">0</div></div>
-        <div class="stat"><div class="stat-label">기타</div><div class="stat-val" id="cp-etc">0</div></div>
+        <div class="stat"><div class="stat-label">Shopee SG</div><div class="stat-val" id="cp-shopee-sg">0</div></div>
+        <div class="stat"><div class="stat-label">Shopee MY</div><div class="stat-val" id="cp-shopee-my">0</div></div>
+        <div class="stat"><div class="stat-label">Shopee</div><div class="stat-val" id="cp-shopee">0</div></div>
       </div>
       <div id="cp-list"></div>
     </div>
 
-    <!-- 아마존 -->
-    <div id="page-amazon" class="page">
-      <div class="top-bar"><span class="page-title">아마존</span><span class="page-tag" style="background:#FAEEDA;color:#854F0B">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="amazon-input" placeholder="새 할 일 입력..."><input type="date" id="amazon-due"><select id="amazon-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('amazon')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('amazon','all',this)">전체</div><div class="ftab" onclick="setFilter('amazon','high',this)">높음</div><div class="ftab" onclick="setFilter('amazon','mid',this)">중간</div><div class="ftab" onclick="setFilter('amazon','low',this)">낮음</div><div class="ftab" onclick="setFilter('amazon','done',this)">완료</div></div>
-      <div id="amazon-list"></div>
+    <!-- Shopee SG -->
+    <div id="page-shopee-sg" class="page">
+      <div class="top-bar"><span class="page-title">Shopee SG</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="shopee-sg-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-sg-due"><select id="shopee-sg-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee-sg')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-sg','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-sg','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee-sg','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee-sg','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee-sg','done',this)">완료</div></div>
+      <div id="shopee-sg-list"></div>
     </div>
 
-    <!-- 쇼피 -->
+    <!-- Shopee MY -->
+    <div id="page-shopee-my" class="page">
+      <div class="top-bar"><span class="page-title">Shopee MY</span><span class="page-tag" style="background:#FFF0DA;color:#A0570F">회사 업무</span></div>
+      <div class="add-bar"><input type="text" id="shopee-my-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-my-due"><select id="shopee-my-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee-my')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-my','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-my','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee-my','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee-my','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee-my','done',this)">완료</div></div>
+      <div id="shopee-my-list"></div>
+    </div>
+
+    <!-- Shopee -->
     <div id="page-shopee" class="page">
-      <div class="top-bar"><span class="page-title">쇼피</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">회사 업무</span></div>
+      <div class="top-bar"><span class="page-title">Shopee</span><span class="page-tag" style="background:#F5DDD0;color:#8B3414">회사 업무</span></div>
       <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee','done',this)">완료</div></div>
       <div id="shopee-list"></div>
-    </div>
-
-    <!-- 틱톡 -->
-    <div id="page-tiktok" class="page">
-      <div class="top-bar"><span class="page-title">틱톡</span><span class="page-tag" style="background:#EEEDFE;color:#534AB7">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="tiktok-input" placeholder="새 할 일 입력..."><input type="date" id="tiktok-due"><select id="tiktok-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('tiktok')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('tiktok','all',this)">전체</div><div class="ftab" onclick="setFilter('tiktok','high',this)">높음</div><div class="ftab" onclick="setFilter('tiktok','mid',this)">중간</div><div class="ftab" onclick="setFilter('tiktok','low',this)">낮음</div><div class="ftab" onclick="setFilter('tiktok','done',this)">완료</div></div>
-      <div id="tiktok-list"></div>
-    </div>
-
-    <!-- 퍼포마 -->
-    <div id="page-performa" class="page">
-      <div class="top-bar"><span class="page-title">퍼포마</span><span class="page-tag" style="background:#E6F1FB;color:#185FA5">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="performa-input" placeholder="새 할 일 입력..."><input type="date" id="performa-due"><select id="performa-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('performa')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('performa','all',this)">전체</div><div class="ftab" onclick="setFilter('performa','high',this)">높음</div><div class="ftab" onclick="setFilter('performa','mid',this)">중간</div><div class="ftab" onclick="setFilter('performa','low',this)">낮음</div><div class="ftab" onclick="setFilter('performa','done',this)">완료</div></div>
-      <div id="performa-list"></div>
-    </div>
-
-    <!-- PD -->
-    <div id="page-pd" class="page">
-      <div class="top-bar"><span class="page-title">PD</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="pd-input" placeholder="새 할 일 입력..."><input type="date" id="pd-due"><select id="pd-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('pd')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('pd','all',this)">전체</div><div class="ftab" onclick="setFilter('pd','high',this)">높음</div><div class="ftab" onclick="setFilter('pd','mid',this)">중간</div><div class="ftab" onclick="setFilter('pd','low',this)">낮음</div><div class="ftab" onclick="setFilter('pd','done',this)">완료</div></div>
-      <div id="pd-list"></div>
-    </div>
-
-    <!-- MD -->
-    <div id="page-md" class="page">
-      <div class="top-bar"><span class="page-title">MD</span><span class="page-tag" style="background:#FBEAF0;color:#993556">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="md-input" placeholder="새 할 일 입력..."><input type="date" id="md-due"><select id="md-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('md')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('md','all',this)">전체</div><div class="ftab" onclick="setFilter('md','high',this)">높음</div><div class="ftab" onclick="setFilter('md','mid',this)">중간</div><div class="ftab" onclick="setFilter('md','low',this)">낮음</div><div class="ftab" onclick="setFilter('md','done',this)">완료</div></div>
-      <div id="md-list"></div>
-    </div>
-
-    <!-- 기타 -->
-    <div id="page-etc" class="page">
-      <div class="top-bar"><span class="page-title">기타</span><span class="page-tag" style="background:#EEEDE8;color:#5C5A53">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="etc-input" placeholder="새 할 일 입력..."><input type="date" id="etc-due"><select id="etc-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('etc')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('etc','all',this)">전체</div><div class="ftab" onclick="setFilter('etc','high',this)">높음</div><div class="ftab" onclick="setFilter('etc','mid',this)">중간</div><div class="ftab" onclick="setFilter('etc','low',this)">낮음</div><div class="ftab" onclick="setFilter('etc','done',this)">완료</div></div>
-      <div id="etc-list"></div>
     </div>
 
   </main>
@@ -942,20 +819,14 @@
 
 <script>
   /* ── 상수 ── */
-  const SCOPES = ['personal','neaf','amazon','shopee','tiktok','performa','pd','md','etc'];
-  const CAT_LABELS = {personal:'개인',neaf:'Neaf',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타'};
+  const SCOPES = ['shopee-sg','shopee-my','shopee'];
+  const CAT_LABELS = {'shopee-sg':'Shopee SG','shopee-my':'Shopee MY',shopee:'Shopee'};
   const CAT_COLORS = {
-    personal:{bg:'#E1F5EE',color:'#0F6E56'},
-    neaf:    {bg:'#E8F5E0',color:'#3B6D11'},
-    amazon:  {bg:'#FAEEDA',color:'#854F0B'},
-    shopee:  {bg:'#FAECE7',color:'#993C1D'},
-    tiktok:  {bg:'#EEEDFE',color:'#534AB7'},
-    performa:{bg:'#E6F1FB',color:'#185FA5'},
-    pd:      {bg:'#E1F5EE',color:'#0F6E56'},
-    md:      {bg:'#FBEAF0',color:'#993556'},
-    etc:     {bg:'#EEEDE8',color:'#5C5A53'}
+    'shopee-sg':{bg:'#FAECE7',color:'#993C1D'},
+    'shopee-my':{bg:'#FFF0DA',color:'#A0570F'},
+    shopee:     {bg:'#F5DDD0',color:'#8B3414'}
   };
-  const COMPANY_CATS = ['amazon','shopee','tiktok','performa','pd','md','etc'];
+  const COMPANY_CATS = ['shopee-sg','shopee-my','shopee'];
   const priLabel = {high:'높음', mid:'중간', low:'낮음'};
 
   /* ── 상태 ── */
@@ -966,19 +837,19 @@
   SCOPES.forEach(s => { data[s] = []; filters[s] = 'all'; });
 
   /* ── 입력 ID 헬퍼 ── */
-  const inputId = s => s === 'personal' ? 'p-input' : s + '-input';
-  const dueId   = s => s === 'personal' ? 'p-due'   : s + '-due';
-  const priId   = s => s === 'personal' ? 'p-pri'   : s + '-pri';
-  const listId  = s => s === 'personal' ? 'p-list'  : s + '-list';
+  const inputId = s => s + '-input';
+  const dueId   = s => s + '-due';
+  const priId   = s => s + '-pri';
+  const listId  = s => s + '-list';
 
   /* ── 저장/로드 + 마이그레이션 ── */
   function save(scope) {
-    try { localStorage.setItem('ethan_todos_' + scope, JSON.stringify(data[scope])); } catch(e) {}
+    try { localStorage.setItem('boseul_todos_' + scope, JSON.stringify(data[scope])); } catch(e) {}
   }
   function loadAll() {
     SCOPES.forEach(s => {
       try {
-        const raw = localStorage.getItem('ethan_todos_' + s);
+        const raw = localStorage.getItem('boseul_todos_' + s);
         if (raw) data[s] = JSON.parse(raw);
       } catch(e) { data[s] = []; }
       // 마이그레이션: 누락 필드 채우기 + 1회 백업
@@ -991,9 +862,9 @@
       });
       if (migrated) {
         try {
-          const bk = 'ethan_todos_' + s + '_backup_v1';
+          const bk = 'boseul_todos_' + s + '_backup_v1';
           if (!localStorage.getItem(bk)) {
-            const orig = localStorage.getItem('ethan_todos_' + s);
+            const orig = localStorage.getItem('boseul_todos_' + s);
             if (orig) localStorage.setItem(bk, orig);
           }
         } catch(e) {}
@@ -1146,7 +1017,7 @@
     v.classList.toggle('open', !o);
   }
   function initGroups() {
-    ['personal','company','team'].forEach(id => {
+    ['company'].forEach(id => {
       const el = document.getElementById('group-' + id);
       el.style.maxHeight = el.scrollHeight + 'px';
     });
@@ -1310,10 +1181,10 @@
     const allHigh = COMPANY_CATS.flatMap(cat =>
       data[cat].filter(t => t.pri === 'high' && !t.done).map(t => ({...t, cat}))
     );
-    document.getElementById('cp-total').textContent  = allHigh.length;
-    document.getElementById('cp-amazon').textContent = allHigh.filter(t => t.cat === 'amazon').length;
-    document.getElementById('cp-mkt').textContent    = allHigh.filter(t => t.cat === 'performa' || t.cat === 'pd').length;
-    document.getElementById('cp-etc').textContent    = allHigh.filter(t => t.cat === 'shopee' || t.cat === 'tiktok' || t.cat === 'md').length;
+    document.getElementById('cp-total').textContent     = allHigh.length;
+    document.getElementById('cp-shopee-sg').textContent = allHigh.filter(t => t.cat === 'shopee-sg').length;
+    document.getElementById('cp-shopee-my').textContent = allHigh.filter(t => t.cat === 'shopee-my').length;
+    document.getElementById('cp-shopee').textContent    = allHigh.filter(t => t.cat === 'shopee').length;
 
     const badge = document.getElementById('badge-company');
     badge.textContent = allHigh.length;
@@ -1338,18 +1209,6 @@
 
   /* ── 일반 렌더 ── */
   function render(scope) {
-    if (scope === 'personal') {
-      const todos = data[scope];
-      const high  = todos.filter(t => t.pri === 'high' && !t.done).length;
-      document.getElementById('p-total').textContent = todos.length;
-      document.getElementById('p-high').textContent  = high;
-      document.getElementById('p-prog').textContent  = todos.filter(t => !t.done).length;
-      document.getElementById('p-done').textContent  = todos.filter(t => t.done).length;
-      const badge = document.getElementById('badge-personal');
-      badge.textContent = high;
-      badge.style.display = high > 0 ? '' : 'none';
-    }
-
     const wrap = document.getElementById(listId(scope));
     if (!wrap) return;
     wrap.innerHTML = '';
@@ -1501,8 +1360,8 @@
   }
 
   /* ── 인증 ── */
-  const AUTH_KEY = 'ethan_auth_v1';
-  const SESSION_KEY = 'ethan_session_v1';
+  const AUTH_KEY = 'boseul_auth_v1';
+  const SESSION_KEY = 'boseul_session_v1';
   let isCreating = false;
 
   async function sha256(text) {
@@ -1562,7 +1421,7 @@
 
   function unlock(username) {
     document.body.classList.remove('locked');
-    const u = username || (getAuth() && getAuth().id) || 'Ethan';
+    const u = username || (getAuth() && getAuth().id) || '이보슬';
     document.getElementById('sb-username').textContent = u;
     document.getElementById('sb-avatar').textContent = u.charAt(0).toUpperCase();
     loadAll();
@@ -1579,7 +1438,7 @@
     if (!confirm('정말 초기화하시겠습니까?\n계정과 모든 할 일 데이터가 삭제됩니다.')) return;
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
-      if (k && k.startsWith('ethan_')) localStorage.removeItem(k);
+      if (k && k.startsWith('boseul_')) localStorage.removeItem(k);
     }
     sessionStorage.removeItem(SESSION_KEY);
     SCOPES.forEach(s => { data[s] = []; });
