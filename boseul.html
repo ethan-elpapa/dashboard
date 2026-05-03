@@ -297,7 +297,8 @@
 
     /* ── TODO ITEMS ── */
     .todo-item {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto auto 1fr 1fr 1fr 1fr;
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
@@ -307,6 +308,14 @@
       margin-bottom: 5px;
       cursor: pointer;
       transition: box-shadow .12s, transform .12s, opacity .12s;
+    }
+    .todo-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+      min-width: 0;
+      grid-column: 6;
     }
     .todo-item:hover { box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .todo-item.done-item { opacity: .5; }
@@ -327,11 +336,15 @@
     .check-icon { width: 10px; height: 10px; display: none; }
     .check-btn.checked .check-icon { display: block; }
 
-    .todo-body { flex: 1; min-width: 0; }
+    .todo-body { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 10px; overflow: hidden; flex-wrap: wrap; }
     .todo-text {
       font-size: 13px;
       color: var(--text-primary);
-      word-break: break-word;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+      max-width: 100%;
     }
     .todo-item.done-item .todo-text { text-decoration: line-through; color: var(--text-secondary); }
     .todo-memo {
@@ -596,6 +609,149 @@
     .auth-foot a { color: #378ADD; cursor: pointer; text-decoration: none; }
     .auth-foot a:hover { text-decoration: underline; }
 
+    /* ── 별점 ── */
+    .stars { display: inline-flex; gap: 1px; font-size: 12px; color: #d3d1c8; flex-shrink: 0; }
+    .stars .filled { color: #F0B400; }
+
+    /* ── 상태 배지 ── */
+    .status-badge {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+      white-space: nowrap; cursor: pointer; user-select: none; transition: opacity .12s;
+    }
+    .status-badge:hover { opacity: .8; }
+    .status-badge.pending  { background: #EEEDE8; color: #5C5A53; }
+    .status-badge.progress { background: #FFE9D1; color: #B85B0A; }
+    .status-badge.hold     { background: #EEEDFE; color: #534AB7; }
+    .status-badge.done     { background: #E1F5EE; color: #0F6E56; }
+
+    .todo-progress, .todo-issue {
+      font-size: 13px; color: var(--text-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      min-width: 0; flex: 1 1 auto;
+    }
+    .todo-issue { color: #A32D2D; }
+
+    .star-input { display: flex; gap: 6px; font-size: 24px; color: #d3d1c8; cursor: pointer; user-select: none; }
+    .star-input span { transition: color .1s; }
+    .star-input span.filled { color: #F0B400; }
+    .star-input span:hover ~ span { color: #d3d1c8; }
+    .star-input:hover span { color: #F0B400; }
+
+    /* ── 캘린더 위젯 ── */
+    .cal-widget {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+    .cal-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      min-width: 110px;
+      text-align: center;
+    }
+    .cal-nav {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font);
+    }
+    .cal-nav:hover { background: var(--bg-primary); color: var(--text-primary); }
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 4px;
+    }
+    .cal-weekdays > div {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: center;
+      font-weight: 600;
+      padding: 2px 0;
+    }
+    .cal-weekdays > div:first-child { color: #A32D2D; }
+    .cal-weekdays > div:last-child  { color: #185FA5; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-cell {
+      position: relative;
+      padding: 4px 3px 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      min-height: 78px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: default;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 3px;
+    }
+    .cal-cell-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      margin-top: 1px;
+    }
+    .cal-cell-title {
+      font-size: 9px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      padding: 1px 4px;
+      border-radius: 3px;
+      text-align: left;
+      line-height: 1.3;
+    }
+    .cal-cell-title.high { background: #FCEBEB; color: #A32D2D; }
+    .cal-cell-title.mid  { background: #FAEEDA; color: #854F0B; }
+    .cal-cell-title.low  { background: #EAF3DE; color: #3B6D11; }
+    .cal-cell-title.done { background: var(--bg-secondary); color: var(--text-secondary); text-decoration: line-through; }
+    .cal-cell-more {
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 0;
+      margin-top: 1px;
+    }
+    .cal-cell.empty { background: transparent; }
+    .cal-cell.today { background: #E6F1FB; color: #185FA5; font-weight: 700; }
+    .cal-cell.has-todo { font-weight: 600; }
+    .cal-cell.overdue { background: #FCEBEB; color: #A32D2D; }
+    .cal-dots {
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      min-height: 4px;
+    }
+    .cal-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; }
+    .cal-dot.high { background: #A32D2D; }
+    .cal-dot.mid  { background: #B85B0A; }
+    .cal-dot.low  { background: #3B6D11; }
+    .cal-dot.done { background: #185FA5; }
+
     /* 로그아웃 버튼 */
     .logout-btn {
       font-size: 11px;
@@ -748,38 +904,39 @@
     <div id="page-company-priority" class="page">
       <div class="top-bar">
         <span class="page-title">우선 순위</span>
-        <span class="page-tag" style="background:#FCEBEB;color:#A32D2D">높음 할 일만</span>
+        <span class="page-tag" style="background:#FCEBEB;color:#A32D2D">오늘 / ★5</span>
       </div>
       <div class="stats">
-        <div class="stat"><div class="stat-label">총 높음</div><div class="stat-val" id="cp-total" style="color:#A32D2D">0</div></div>
+        <div class="stat"><div class="stat-label">총 우선</div><div class="stat-val" id="cp-total" style="color:#A32D2D">0</div></div>
         <div class="stat"><div class="stat-label">Shopee SG</div><div class="stat-val" id="cp-shopee-sg">0</div></div>
         <div class="stat"><div class="stat-label">Shopee MY</div><div class="stat-val" id="cp-shopee-my">0</div></div>
         <div class="stat"><div class="stat-label">Shopee</div><div class="stat-val" id="cp-shopee">0</div></div>
       </div>
+      <div class="cal-widget" id="cal-cp"></div>
       <div id="cp-list"></div>
     </div>
 
     <!-- Shopee SG -->
     <div id="page-shopee-sg" class="page">
       <div class="top-bar"><span class="page-title">Shopee SG</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="shopee-sg-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-sg-due"><select id="shopee-sg-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee-sg')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-sg','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-sg','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee-sg','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee-sg','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee-sg','done',this)">완료</div></div>
+      <div class="add-bar"><input type="text" id="shopee-sg-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-sg-due"><select id="shopee-sg-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="shopee-sg-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><button class="add-btn" onclick="addTodo('shopee-sg')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-sg','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-sg','pending',this)">대기중</div><div class="ftab" onclick="setFilter('shopee-sg','progress',this)">진행중</div><div class="ftab" onclick="setFilter('shopee-sg','hold',this)">보류</div><div class="ftab" onclick="setFilter('shopee-sg','done',this)">완료</div></div>
       <div id="shopee-sg-list"></div>
     </div>
 
     <!-- Shopee MY -->
     <div id="page-shopee-my" class="page">
       <div class="top-bar"><span class="page-title">Shopee MY</span><span class="page-tag" style="background:#FFF0DA;color:#A0570F">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="shopee-my-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-my-due"><select id="shopee-my-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee-my')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-my','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-my','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee-my','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee-my','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee-my','done',this)">완료</div></div>
+      <div class="add-bar"><input type="text" id="shopee-my-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-my-due"><select id="shopee-my-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="shopee-my-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><button class="add-btn" onclick="addTodo('shopee-my')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee-my','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee-my','pending',this)">대기중</div><div class="ftab" onclick="setFilter('shopee-my','progress',this)">진행중</div><div class="ftab" onclick="setFilter('shopee-my','hold',this)">보류</div><div class="ftab" onclick="setFilter('shopee-my','done',this)">완료</div></div>
       <div id="shopee-my-list"></div>
     </div>
 
     <!-- Shopee -->
     <div id="page-shopee" class="page">
       <div class="top-bar"><span class="page-title">Shopee</span><span class="page-tag" style="background:#F5DDD0;color:#8B3414">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
-      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee','high',this)">높음</div><div class="ftab" onclick="setFilter('shopee','mid',this)">중간</div><div class="ftab" onclick="setFilter('shopee','low',this)">낮음</div><div class="ftab" onclick="setFilter('shopee','done',this)">완료</div></div>
+      <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="shopee-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee','pending',this)">대기중</div><div class="ftab" onclick="setFilter('shopee','progress',this)">진행중</div><div class="ftab" onclick="setFilter('shopee','hold',this)">보류</div><div class="ftab" onclick="setFilter('shopee','done',this)">완료</div></div>
       <div id="shopee-list"></div>
     </div>
 
@@ -790,26 +947,19 @@
 <div class="modal-backdrop" id="edit-modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-title">할 일 수정</div>
-    <div class="modal-field">
-      <label>제목</label>
-      <input type="text" id="edit-text">
-    </div>
-    <div class="modal-field">
-      <label>메모</label>
-      <textarea id="edit-memo" placeholder="상세 설명, 메모..."></textarea>
-    </div>
-    <div class="modal-field">
-      <label>우선순위</label>
-      <select id="edit-pri">
-        <option value="high">높음</option>
-        <option value="mid">중간</option>
-        <option value="low">낮음</option>
+    <div class="modal-field"><label>제목</label><input type="text" id="edit-text"></div>
+    <div class="modal-field"><label>우선순위</label><div class="star-input" id="edit-stars"></div></div>
+    <div class="modal-field"><label>마감일정</label><input type="date" id="edit-due"></div>
+    <div class="modal-field"><label>상태</label>
+      <select id="edit-status">
+        <option value="pending">대기중</option>
+        <option value="progress">진행중</option>
+        <option value="hold">보류</option>
+        <option value="done">완료</option>
       </select>
     </div>
-    <div class="modal-field">
-      <label>마감일</label>
-      <input type="date" id="edit-due">
-    </div>
+    <div class="modal-field"><label>진행 상황</label><textarea id="edit-progress" placeholder="현재 진행 상황..."></textarea></div>
+    <div class="modal-field"><label>이슈</label><textarea id="edit-issue" placeholder="문제나 이슈 사항..."></textarea></div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeModal()">취소</button>
       <button class="modal-btn primary" onclick="saveEdit()">저장</button>
@@ -859,6 +1009,16 @@
         if (t.memo === undefined) { t.memo = ''; migrated = true; }
         if (t.order === undefined) { t.order = i; migrated = true; }
         if (t.completedAt === undefined) { t.completedAt = null; migrated = true; }
+        if (t.stars === undefined) {
+          t.stars = t.pri === 'high' ? 5 : t.pri === 'low' ? 2 : 3;
+          migrated = true;
+        }
+        if (t.status === undefined) {
+          t.status = t.done ? 'done' : 'pending';
+          migrated = true;
+        }
+        if (t.progress === undefined) { t.progress = t.memo || ''; migrated = true; }
+        if (t.issue === undefined) { t.issue = ''; migrated = true; }
       });
       if (migrated) {
         try {
@@ -916,20 +1076,28 @@
   });
 
   /* ── CRUD ── */
+  const starsId  = s => s + '-stars';
+  const statusId = s => s + '-status';
+
   function addTodo(scope) {
     const input = document.getElementById(inputId(scope));
     const text  = input.value.trim();
     if (!text) return;
-    const pri = document.getElementById(priId(scope)).value;
     const dueRaw = document.getElementById(dueId(scope)).value;
     const due = dueRaw ? isoToDot(dueRaw) : null;
+    const starsEl  = document.getElementById(starsId(scope));
+    const statusEl = document.getElementById(statusId(scope));
+    const stars  = starsEl  ? Number(starsEl.value)  : 3;
+    const status = statusEl ? statusEl.value : 'pending';
+    const isDone = status === 'done';
     const maxOrder = data[scope].reduce((m,t) => Math.max(m, t.order || 0), -1);
     data[scope].push({
-      id: Date.now(),
-      text, pri, done: false,
-      date: today(),
+      id: Date.now(), text,
+      pri: stars >= 4 ? 'high' : stars <= 2 ? 'low' : 'mid',
+      done: isDone, date: today(),
       due, memo: '', order: maxOrder + 1,
-      completedAt: null
+      completedAt: isDone ? today() : null,
+      stars, status, progress: '', issue: ''
     });
     input.value = '';
     document.getElementById(dueId(scope)).value = '';
@@ -941,9 +1109,25 @@
     if (ev) ev.stopPropagation();
     const t = data[scope].find(t => t.id === id);
     if (t) {
-      t.done = !t.done;
-      t.completedAt = t.done ? today() : null;
+      const wasDone = t.status === 'done';
+      t.status = wasDone ? 'pending' : 'done';
+      t.done = !wasDone;
+      t.completedAt = !wasDone ? today() : null;
     }
+    save(scope);
+    afterChange(scope);
+  }
+
+  const STATUS_CYCLE = ['pending','progress','hold','done'];
+  function cycleStatus(scope, id, ev) {
+    if (ev) ev.stopPropagation();
+    const t = data[scope].find(t => t.id === id);
+    if (!t) return;
+    const idx = STATUS_CYCLE.indexOf(t.status || 'pending');
+    const next = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
+    t.status = next;
+    t.done = next === 'done';
+    t.completedAt = next === 'done' ? today() : null;
     save(scope);
     afterChange(scope);
   }
@@ -963,15 +1147,30 @@
   }
 
   /* ── 수정 모달 ── */
+  function renderStarInput(value) {
+    const wrap = document.getElementById('edit-stars');
+    wrap.innerHTML = '';
+    wrap.dataset.value = value;
+    for (let i = 1; i <= 5; i++) {
+      const s = document.createElement('span');
+      s.textContent = '★';
+      if (i <= value) s.classList.add('filled');
+      s.onclick = () => renderStarInput(i);
+      wrap.appendChild(s);
+    }
+  }
+
   function openEdit(scope, id, ev) {
     if (ev) ev.stopPropagation();
     const t = data[scope].find(t => t.id === id);
     if (!t) return;
     editing = { scope, id };
     document.getElementById('edit-text').value = t.text;
-    document.getElementById('edit-memo').value = t.memo || '';
-    document.getElementById('edit-pri').value  = t.pri;
-    document.getElementById('edit-due').value  = t.due ? dotToISO(t.due) : '';
+    document.getElementById('edit-progress').value = t.progress || '';
+    document.getElementById('edit-issue').value = t.issue || '';
+    document.getElementById('edit-status').value = t.status || 'pending';
+    document.getElementById('edit-due').value = t.due ? dotToISO(t.due) : '';
+    renderStarInput(t.stars || 3);
     document.getElementById('edit-modal').classList.add('open');
     setTimeout(() => document.getElementById('edit-text').focus(), 30);
   }
@@ -985,11 +1184,18 @@
     if (!t) { closeModal(); return; }
     const newText = document.getElementById('edit-text').value.trim();
     if (!newText) return;
-    t.text = newText;
-    t.memo = document.getElementById('edit-memo').value.trim();
-    t.pri  = document.getElementById('edit-pri').value;
+    const newStatus = document.getElementById('edit-status').value;
+    t.text     = newText;
+    t.stars    = Number(document.getElementById('edit-stars').dataset.value || 3);
+    t.progress = document.getElementById('edit-progress').value.trim();
+    t.issue    = document.getElementById('edit-issue').value.trim();
     const dueRaw = document.getElementById('edit-due').value;
     t.due = dueRaw ? isoToDot(dueRaw) : null;
+    const wasDone = t.status === 'done';
+    t.status = newStatus;
+    t.done = newStatus === 'done';
+    if (newStatus === 'done' && !wasDone) t.completedAt = today();
+    if (newStatus !== 'done') t.completedAt = null;
     save(editing.scope);
     const scope = editing.scope;
     closeModal();
@@ -1076,13 +1282,17 @@
     if (dragSrc) ev.preventDefault();
   }
 
-  function reorder(scope, srcId, targetId, insertBefore, targetPri) {
+  function reorder(scope, srcId, targetId, insertBefore, targetStatus) {
     const arr = data[scope];
     const srcIdx = arr.findIndex(t => t.id === srcId);
     if (srcIdx < 0) return;
     const src = arr[srcIdx];
     arr.splice(srcIdx, 1);
-    if (targetPri && src.pri !== targetPri) src.pri = targetPri;
+    if (targetStatus && (src.status || 'pending') !== targetStatus) {
+      src.status = targetStatus;
+      src.done = targetStatus === 'done';
+      src.completedAt = targetStatus === 'done' ? today() : null;
+    }
     if (targetId == null) {
       arr.push(src);
     } else {
@@ -1141,32 +1351,46 @@
     });
   }
 
+  function starsHtml(n) {
+    n = Number(n) || 0;
+    let html = '<span class="stars">';
+    for (let i = 1; i <= 5; i++) html += `<span class="${i <= n ? 'filled' : ''}">★</span>`;
+    return html + '</span>';
+  }
+  const STATUS_LABEL = { pending:'대기중', progress:'진행중', hold:'보류', done:'완료' };
+
   /* ── 할 일 element 빌더 ── */
   function buildTodoItem(t, scope, draggable) {
+    const status = t.status || 'pending';
+    const isDone = status === 'done';
     const div = document.createElement('div');
-    div.className = 'todo-item' + (t.done ? ' done-item' : '');
+    div.className = 'todo-item' + (isDone ? ' done-item' : '');
     div.dataset.id = t.id;
-    div.dataset.pri = t.pri;
+    div.dataset.status = status;
     if (draggable) {
       div.draggable = true;
       div.addEventListener('dragstart', e => onDragStart(e, scope, t.id));
       div.addEventListener('dragend',   e => onDragEnd(e));
       div.addEventListener('dragover',  e => onDragOverItem(e));
-      div.addEventListener('drop',      e => onDropItem(e, scope, t.id, t.pri));
+      div.addEventListener('drop',      e => onDropItem(e, scope, t.id, status));
     }
     div.onclick = (e) => openEdit(scope, t.id, e);
-    const memoLine = t.memo ? `<div class="todo-memo">${escapeHtml(t.memo)}</div>` : '';
+    const progressContent = t.progress ? `진행: ${escapeHtml(t.progress)}` : '';
+    const issueContent    = t.issue    ? `⚠ ${escapeHtml(t.issue)}` : '';
     div.innerHTML = `
-      <button class="check-btn ${t.done ? 'checked' : ''}" onclick="toggleDone('${scope}',${t.id},event)">
+      <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleDone('${scope}',${t.id},event)" title="완료 토글">
         <svg class="check-icon" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div class="todo-body">
-        <div class="todo-text">${escapeHtml(t.text)}</div>
-        ${memoLine}
+      ${starsHtml(t.stars || 3)}
+      <div class="todo-text">${escapeHtml(t.text)}</div>
+      <div class="todo-progress">${progressContent}</div>
+      <div class="todo-issue">${issueContent}</div>
+      <div class="todo-meta">
+        <span class="status-badge ${status}" onclick="cycleStatus('${scope}',${t.id},event)" title="클릭으로 상태 변경">${STATUS_LABEL[status]}</span>
+        ${t.due && !isDone ? ddayBadge(t.due) : ''}
+        <span class="todo-date">${t.due ? t.due : t.date}</span>
+        <button class="del-btn" onclick="deleteTodo('${scope}',${t.id},event)">×</button>
       </div>
-      ${t.due && !t.done ? ddayBadge(t.due) : ''}
-      <span class="todo-date">${t.due ? t.due : t.date}</span>
-      <button class="del-btn" onclick="deleteTodo('${scope}',${t.id},event)">×</button>
     `;
     return div;
   }
@@ -1176,10 +1400,10 @@
       .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  /* ── 회사 우선순위 렌더 ── */
+  /* ── 회사 우선순위 렌더 (별 4-5개) ── */
   function renderCompanyPriority() {
     const allHigh = COMPANY_CATS.flatMap(cat =>
-      data[cat].filter(t => t.pri === 'high' && !t.done).map(t => ({...t, cat}))
+      data[cat].filter(t => t.status !== 'done' && (t.due === today() || (t.stars || 0) === 5)).map(t => ({...t, cat}))
     );
     document.getElementById('cp-total').textContent     = allHigh.length;
     document.getElementById('cp-shopee-sg').textContent = allHigh.filter(t => t.cat === 'shopee-sg').length;
@@ -1192,11 +1416,12 @@
 
     const wrap = document.getElementById('cp-list');
     wrap.innerHTML = '';
-    if (!allHigh.length) { wrap.innerHTML = '<div class="empty">모든 카테고리에 높음 할 일이 없어요.</div>'; return; }
+    renderCompanyPriorityCalendar();
+    if (!allHigh.length) { wrap.innerHTML = '<div class="empty">오늘 마감이거나 별 5개인 할 일이 없어요.</div>'; return; }
 
     COMPANY_CATS.forEach(cat => {
-      const items = data[cat].filter(t => t.pri === 'high' && !t.done)
-                             .sort((a,b) => (a.order||0) - (b.order||0));
+      const items = data[cat].filter(t => t.status !== 'done' && (t.due === today() || (t.stars || 0) === 5))
+                             .sort((a,b) => (b.stars || 0) - (a.stars || 0) || (a.order||0) - (b.order||0));
       if (!items.length) return;
       const c = CAT_COLORS[cat];
       const sec = document.createElement('div');
@@ -1207,47 +1432,104 @@
     });
   }
 
-  /* ── 일반 렌더 ── */
+  // 회사 우선순위 통합 캘린더
+  let cpCalMonth = null;
+  function cpCalNav(delta) {
+    if (!cpCalMonth) { const d = new Date(); cpCalMonth = { year: d.getFullYear(), month: d.getMonth() }; }
+    cpCalMonth.month += delta;
+    if (cpCalMonth.month < 0) { cpCalMonth.month = 11; cpCalMonth.year--; }
+    if (cpCalMonth.month > 11) { cpCalMonth.month = 0; cpCalMonth.year++; }
+    renderCompanyPriorityCalendar();
+  }
+  function renderCompanyPriorityCalendar() {
+    const wrap = document.getElementById('cal-cp');
+    if (!wrap) return;
+    if (!cpCalMonth) { const d = new Date(); cpCalMonth = { year: d.getFullYear(), month: d.getMonth() }; }
+    const m = cpCalMonth;
+    const byDate = {};
+    COMPANY_CATS.forEach(cat => {
+      data[cat].forEach(t => { if (!t.due) return; (byDate[t.due] = byDate[t.due] || []).push(t); });
+    });
+    const firstDay = new Date(m.year, m.month, 1);
+    const lastDay  = new Date(m.year, m.month + 1, 0);
+    const startWeekday = firstDay.getDay();
+    const daysInMonth  = lastDay.getDate();
+    const todayKey = today();
+    let html = `
+      <div class="cal-header">
+        <button class="cal-nav" onclick="cpCalNav(-1)" title="이전 달">‹</button>
+        <span class="cal-title">${m.year}년 ${m.month + 1}월 (회사 통합)</span>
+        <button class="cal-nav" onclick="cpCalNav(1)" title="다음 달">›</button>
+      </div>
+      <div class="cal-weekdays"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+      <div class="cal-grid">
+    `;
+    for (let i = 0; i < startWeekday; i++) html += `<div class="cal-cell empty"></div>`;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateKey = `${m.year}.${String(m.month + 1).padStart(2,'0')}.${String(day).padStart(2,'0')}`;
+      const items = byDate[dateKey] || [];
+      const open  = items.filter(t => t.status !== 'done');
+      const isToday = dateKey === todayKey;
+      const isOverdue = open.length && dateKey < todayKey;
+      const cls = ['cal-cell'];
+      if (isToday) cls.push('today');
+      if (items.length) cls.push('has-todo');
+      if (isOverdue) cls.push('overdue');
+      let titlesHtml = '';
+      items.slice(0, 3).forEach(t => {
+        const stars = t.stars || 3;
+        let priCls = 'mid';
+        if (t.status === 'done') priCls = 'done';
+        else if (stars >= 4) priCls = 'high';
+        else if (stars <= 2) priCls = 'low';
+        titlesHtml += `<div class="cal-cell-title ${priCls}">${escapeHtml(t.text)}</div>`;
+      });
+      if (items.length > 3) titlesHtml += `<div class="cal-cell-more">+${items.length - 3}</div>`;
+      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('
+');
+      html += `<div class="${cls.join(' ')}" title="${escapeHtml(tooltip)}">${day}<div class="cal-cell-titles">${titlesHtml}</div></div>`;
+    }
+    html += `</div>`;
+    wrap.innerHTML = html;
+  }
+
+  /* ── 일반 렌더 (상태별 그룹) ── */
+  const STATUS_ORDER = ['pending','progress','hold','done'];
+
   function render(scope) {
     const wrap = document.getElementById(listId(scope));
     if (!wrap) return;
     wrap.innerHTML = '';
 
-    const todos = data[scope].slice().sort((a,b) => (a.order||0) - (b.order||0));
-    const f     = filters[scope];
-    const dragEnabled = (f === 'all'); // "전체" 필터일 때만 드래그 활성
+    const todos = data[scope].slice().sort((a,b) =>
+      (b.stars || 0) - (a.stars || 0) || (a.order || 0) - (b.order || 0)
+    );
+    const f = filters[scope];
+    const dragEnabled = (f === 'all');
 
-    if (f === 'done') {
-      renderSection(wrap, todos.filter(t => t.done), scope, '완료', 'done-badge', false, null);
-      return;
-    }
-
-    const priorities = f === 'all' ? ['high','mid','low'] : [f];
+    const statuses = f === 'all' ? STATUS_ORDER : [f];
     let any = false;
-    priorities.forEach(pri => {
-      const items = todos.filter(t => t.pri === pri && !t.done);
+    statuses.forEach(st => {
+      const items = todos.filter(t => (t.status || 'pending') === st);
       if (!items.length && !dragEnabled) return;
       any = any || items.length > 0;
-      renderSection(wrap, items, scope, priLabel[pri], pri, dragEnabled, pri);
+      renderSection(wrap, items, scope, STATUS_LABEL[st], st, dragEnabled, st);
     });
 
-    if (f === 'all') {
-      const done = todos.filter(t => t.done);
-      if (done.length) renderSection(wrap, done, scope, '완료', 'done-badge', false, null);
-    }
+    if (!todos.length) { wrap.innerHTML = '<div class="empty">+ 추가 버튼으로 첫 번째 할 일을 입력해보세요.</div>'; }
+    else if (!any) wrap.innerHTML = '<div class="empty">해당 상태의 할 일이 없어요.</div>';
 
-    if (!todos.length) { wrap.innerHTML = '<div class="empty">+ 추가 버튼으로 첫 번째 할 일을 입력해보세요.</div>'; return; }
-    if (!any && f !== 'all' && f !== 'done') wrap.innerHTML = '<div class="empty">해당 우선순위의 할 일이 없어요.</div>';
+    renderCalendar(scope);
   }
 
-  function renderSection(wrap, items, scope, label, priClass, draggable, dropPri) {
+  function renderSection(wrap, items, scope, label, statusClass, draggable, dropStatus) {
     if (!items.length && !draggable) return;
     const sec = document.createElement('div');
     sec.className = 'section';
-    sec.innerHTML = `<div class="section-header"><span class="pri-badge ${priClass}">${label}</span><span class="sec-count">${items.length}개</span></div>`;
-    if (draggable && dropPri) {
+    sec.innerHTML = `<div class="section-header"><span class="status-badge ${statusClass}" style="cursor:default">${label}</span><span class="sec-count">${items.length}개</span></div>`;
+    if (draggable && dropStatus) {
       sec.addEventListener('dragover', onDragOverSection);
-      sec.addEventListener('drop', e => onDropSection(e, scope, dropPri));
+      sec.addEventListener('drop', e => onDropSection(e, scope, dropStatus));
     }
     items.forEach(t => sec.appendChild(buildTodoItem(t, scope, draggable)));
     wrap.appendChild(sec);
@@ -1260,10 +1542,10 @@
     SCOPES.forEach(s => {
       data[s].forEach(t => {
         total++;
-        if (t.done) done++;
+        if (t.status === 'done') done++;
         else {
           prog++;
-          if (t.pri === 'high') high++;
+          if ((t.stars || 0) >= 4) high++;
           const d = dDay(t.due);
           if (d !== null && d <= 3) soon++; // 오늘/지난/3일 이내
         }
@@ -1281,7 +1563,7 @@
     const todays = [];
     SCOPES.forEach(s => {
       data[s].forEach(t => {
-        if (t.done) return;
+        if (t.status === 'done') return;
         const d = dDay(t.due);
         if (d !== null && d <= 0) todays.push({...t, scope: s});
       });
@@ -1309,7 +1591,7 @@
     prWrap.innerHTML = '';
     SCOPES.forEach(s => {
       const total = data[s].length;
-      const done  = data[s].filter(t => t.done).length;
+      const done  = data[s].filter(t => t.status === 'done').length;
       const pct = total ? Math.round(done / total * 100) : 0;
       const row = document.createElement('div');
       row.className = 'pr-row';
@@ -1424,6 +1706,7 @@
     const u = username || (getAuth() && getAuth().id) || '이보슬';
     document.getElementById('sb-username').textContent = u;
     document.getElementById('sb-avatar').textContent = u.charAt(0).toUpperCase();
+    injectCalendars();
     loadAll();
     setTimeout(initGroups, 50);
   }
@@ -1452,6 +1735,88 @@
       authSubmit();
     }
   });
+
+  /* ── 캘린더 ── */
+  const calMonths = {};
+  function calInit(scope) {
+    if (!calMonths[scope]) {
+      const d = new Date();
+      calMonths[scope] = { year: d.getFullYear(), month: d.getMonth() };
+    }
+  }
+  function calNav(scope, delta) {
+    calInit(scope);
+    const m = calMonths[scope];
+    m.month += delta;
+    if (m.month < 0) { m.month = 11; m.year--; }
+    if (m.month > 11) { m.month = 0; m.year++; }
+    renderCalendar(scope);
+  }
+  function renderCalendar(scope) {
+    const wrap = document.getElementById('cal-' + scope);
+    if (!wrap) return;
+    calInit(scope);
+    const m = calMonths[scope];
+    const todos = data[scope] || [];
+    const byDate = {};
+    todos.forEach(t => { if (!t.due) return; (byDate[t.due] = byDate[t.due] || []).push(t); });
+    const firstDay = new Date(m.year, m.month, 1);
+    const lastDay  = new Date(m.year, m.month + 1, 0);
+    const startWeekday = firstDay.getDay();
+    const daysInMonth  = lastDay.getDate();
+    const todayKey = today();
+    let html = `
+      <div class="cal-header">
+        <button class="cal-nav" onclick="calNav('${scope}',-1)" title="이전 달">‹</button>
+        <span class="cal-title">${m.year}년 ${m.month + 1}월</span>
+        <button class="cal-nav" onclick="calNav('${scope}',1)" title="다음 달">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+      </div>
+      <div class="cal-grid">
+    `;
+    for (let i = 0; i < startWeekday; i++) html += `<div class="cal-cell empty"></div>`;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateKey = `${m.year}.${String(m.month + 1).padStart(2,'0')}.${String(day).padStart(2,'0')}`;
+      const items = byDate[dateKey] || [];
+      const open  = items.filter(t => t.status !== 'done');
+      const isToday = dateKey === todayKey;
+      const isOverdue = open.length && dateKey < todayKey;
+      const cls = ['cal-cell'];
+      if (isToday) cls.push('today');
+      if (items.length) cls.push('has-todo');
+      if (isOverdue) cls.push('overdue');
+      let titlesHtml = '';
+      items.slice(0, 3).forEach(t => {
+        const stars = t.stars || 3;
+        let priCls = 'mid';
+        if (t.status === 'done') priCls = 'done';
+        else if (stars >= 4) priCls = 'high';
+        else if (stars <= 2) priCls = 'low';
+        titlesHtml += `<div class="cal-cell-title ${priCls}">${escapeHtml(t.text)}</div>`;
+      });
+      if (items.length > 3) titlesHtml += `<div class="cal-cell-more">+${items.length - 3}</div>`;
+      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('
+');
+      html += `<div class="${cls.join(' ')}" title="${escapeHtml(tooltip)}">${day}<div class="cal-cell-titles">${titlesHtml}</div></div>`;
+    }
+    html += `</div>`;
+    wrap.innerHTML = html;
+  }
+  function injectCalendars() {
+    SCOPES.forEach(s => {
+      const list = document.getElementById(listId(s));
+      if (!list) return;
+      const page = list.parentElement;
+      if (page.querySelector('#cal-' + s)) return;
+      const cal = document.createElement('div');
+      cal.className = 'cal-widget';
+      cal.id = 'cal-' + s;
+      const filterBar = page.querySelector('.filter-bar');
+      page.insertBefore(cal, filterBar || list);
+    });
+  }
 
   /* ── 초기화 ── */
   function init() {
