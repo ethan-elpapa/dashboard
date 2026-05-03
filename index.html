@@ -1525,7 +1525,7 @@
 
   /* ── 대시보드 ── */
   function renderDashboard() {
-    // 요약 (이단님 본인 데이터만)
+    // 요약 (이든님 본인 데이터만)
     let total=0, done=0, prog=0, high=0, soon=0;
     OWN_SCOPES.forEach(s => {
       data[s].forEach(t => {
@@ -1545,7 +1545,7 @@
     document.getElementById('d-high').textContent  = high;
     document.getElementById('d-soon').textContent  = soon;
 
-    // 오늘 할 일: 마감일이 오늘이거나 지난 미완료 (이단님 본인 데이터만)
+    // 오늘 할 일: 마감일이 오늘이거나 지난 미완료 (이든님 본인 데이터만)
     const todayList = document.getElementById('d-today');
     todayList.innerHTML = '';
     const todays = [];
@@ -1574,7 +1574,7 @@
       });
     }
 
-    // 카테고리별 진행률 (이단님 본인 데이터만)
+    // 카테고리별 진행률 (이든님 본인 데이터만)
     const prWrap = document.getElementById('d-progress');
     prWrap.innerHTML = '';
     OWN_SCOPES.forEach(s => {

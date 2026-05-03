@@ -1468,7 +1468,7 @@
 
   /* ── 초기화 ── */
   function init() {
-    // 관리자(이단)가 메인 사이트에서 클릭한 경우 일회용 bypass 플래그로 로그인 우회
+    // 관리자(이든)가 메인 사이트에서 클릭한 경우 일회용 bypass 플래그로 로그인 우회
     if (localStorage.getItem('team_bypass_ongicheol') === '1') {
       try { localStorage.removeItem('team_bypass_ongicheol'); } catch(e) {}
       sessionStorage.setItem(SESSION_KEY, '1');
