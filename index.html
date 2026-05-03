@@ -731,15 +731,32 @@
       </svg>
     </div>
     <div id="group-team" class="sb-children">
-      <div class="sb-item sub" onclick="openTeamMember('ongicheol')" title="새 탭에서 열기 (관리자 모드)">
+      <!-- 온기철 -->
+      <div class="sb-item sub" onclick="toggleGroup('ongicheol')" style="cursor:pointer">
         <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
         온기철
-        <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg id="chev-ongicheol" class="sb-chevron open" viewBox="0 0 12 12" fill="none" style="margin-left:auto">
+          <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
-      <div class="sb-item sub" onclick="openTeamMember('boseul')" title="새 탭에서 열기 (관리자 모드)">
+      <div id="group-ongicheol" class="sb-children">
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__ongicheol__tiktok-us',this)">Tiktok US</div>
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__ongicheol__tiktok-uk',this)">Tiktok UK</div>
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__ongicheol__shopify',this)">Shopify</div>
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__ongicheol__etc',this)">기타</div>
+      </div>
+      <!-- 이보슬 -->
+      <div class="sb-item sub" onclick="toggleGroup('boseul')" style="cursor:pointer">
         <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
         이보슬
-        <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg id="chev-boseul" class="sb-chevron open" viewBox="0 0 12 12" fill="none" style="margin-left:auto">
+          <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div id="group-boseul" class="sb-children">
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__boseul__shopee-sg',this)">Shopee SG</div>
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__boseul__shopee-my',this)">Shopee MY</div>
+        <div class="sb-item" style="padding-left:44px" onclick="goPage('team__boseul__shopee',this)">Shopee</div>
       </div>
     </div>
 
@@ -906,6 +923,62 @@
       <div id="etc-list"></div>
     </div>
 
+    <!-- 팀원: 온기철 - Tiktok US -->
+    <div id="page-team__ongicheol__tiktok-us" class="page">
+      <div class="top-bar"><span class="page-title">Tiktok US</span><span class="page-tag" style="background:#EEEDFE;color:#534AB7">온기철</span></div>
+      <div class="add-bar"><input type="text" id="team__ongicheol__tiktok-us-input" placeholder="새 할 일 입력..."><input type="date" id="team__ongicheol__tiktok-us-due"><select id="team__ongicheol__tiktok-us-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__ongicheol__tiktok-us')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__ongicheol__tiktok-us','all',this)">전체</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-us','high',this)">높음</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-us','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-us','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-us','done',this)">완료</div></div>
+      <div id="team__ongicheol__tiktok-us-list"></div>
+    </div>
+
+    <!-- 팀원: 온기철 - Tiktok UK -->
+    <div id="page-team__ongicheol__tiktok-uk" class="page">
+      <div class="top-bar"><span class="page-title">Tiktok UK</span><span class="page-tag" style="background:#E6F1FB;color:#185FA5">온기철</span></div>
+      <div class="add-bar"><input type="text" id="team__ongicheol__tiktok-uk-input" placeholder="새 할 일 입력..."><input type="date" id="team__ongicheol__tiktok-uk-due"><select id="team__ongicheol__tiktok-uk-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__ongicheol__tiktok-uk')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__ongicheol__tiktok-uk','all',this)">전체</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-uk','high',this)">높음</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-uk','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-uk','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__ongicheol__tiktok-uk','done',this)">완료</div></div>
+      <div id="team__ongicheol__tiktok-uk-list"></div>
+    </div>
+
+    <!-- 팀원: 온기철 - Shopify -->
+    <div id="page-team__ongicheol__shopify" class="page">
+      <div class="top-bar"><span class="page-title">Shopify</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">온기철</span></div>
+      <div class="add-bar"><input type="text" id="team__ongicheol__shopify-input" placeholder="새 할 일 입력..."><input type="date" id="team__ongicheol__shopify-due"><select id="team__ongicheol__shopify-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__ongicheol__shopify')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__ongicheol__shopify','all',this)">전체</div><div class="ftab" onclick="setFilter('team__ongicheol__shopify','high',this)">높음</div><div class="ftab" onclick="setFilter('team__ongicheol__shopify','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__ongicheol__shopify','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__ongicheol__shopify','done',this)">완료</div></div>
+      <div id="team__ongicheol__shopify-list"></div>
+    </div>
+
+    <!-- 팀원: 온기철 - 기타 -->
+    <div id="page-team__ongicheol__etc" class="page">
+      <div class="top-bar"><span class="page-title">기타</span><span class="page-tag" style="background:#EEEDE8;color:#5C5A53">온기철</span></div>
+      <div class="add-bar"><input type="text" id="team__ongicheol__etc-input" placeholder="새 할 일 입력..."><input type="date" id="team__ongicheol__etc-due"><select id="team__ongicheol__etc-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__ongicheol__etc')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__ongicheol__etc','all',this)">전체</div><div class="ftab" onclick="setFilter('team__ongicheol__etc','high',this)">높음</div><div class="ftab" onclick="setFilter('team__ongicheol__etc','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__ongicheol__etc','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__ongicheol__etc','done',this)">완료</div></div>
+      <div id="team__ongicheol__etc-list"></div>
+    </div>
+
+    <!-- 팀원: 이보슬 - Shopee SG -->
+    <div id="page-team__boseul__shopee-sg" class="page">
+      <div class="top-bar"><span class="page-title">Shopee SG</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">이보슬</span></div>
+      <div class="add-bar"><input type="text" id="team__boseul__shopee-sg-input" placeholder="새 할 일 입력..."><input type="date" id="team__boseul__shopee-sg-due"><select id="team__boseul__shopee-sg-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__boseul__shopee-sg')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__boseul__shopee-sg','all',this)">전체</div><div class="ftab" onclick="setFilter('team__boseul__shopee-sg','high',this)">높음</div><div class="ftab" onclick="setFilter('team__boseul__shopee-sg','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__boseul__shopee-sg','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__boseul__shopee-sg','done',this)">완료</div></div>
+      <div id="team__boseul__shopee-sg-list"></div>
+    </div>
+
+    <!-- 팀원: 이보슬 - Shopee MY -->
+    <div id="page-team__boseul__shopee-my" class="page">
+      <div class="top-bar"><span class="page-title">Shopee MY</span><span class="page-tag" style="background:#FFF0DA;color:#A0570F">이보슬</span></div>
+      <div class="add-bar"><input type="text" id="team__boseul__shopee-my-input" placeholder="새 할 일 입력..."><input type="date" id="team__boseul__shopee-my-due"><select id="team__boseul__shopee-my-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__boseul__shopee-my')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__boseul__shopee-my','all',this)">전체</div><div class="ftab" onclick="setFilter('team__boseul__shopee-my','high',this)">높음</div><div class="ftab" onclick="setFilter('team__boseul__shopee-my','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__boseul__shopee-my','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__boseul__shopee-my','done',this)">완료</div></div>
+      <div id="team__boseul__shopee-my-list"></div>
+    </div>
+
+    <!-- 팀원: 이보슬 - Shopee -->
+    <div id="page-team__boseul__shopee" class="page">
+      <div class="top-bar"><span class="page-title">Shopee</span><span class="page-tag" style="background:#F5DDD0;color:#8B3414">이보슬</span></div>
+      <div class="add-bar"><input type="text" id="team__boseul__shopee-input" placeholder="새 할 일 입력..."><input type="date" id="team__boseul__shopee-due"><select id="team__boseul__shopee-pri"><option value="high">높음</option><option value="mid" selected>중간</option><option value="low">낮음</option></select><button class="add-btn" onclick="addTodo('team__boseul__shopee')">+ 추가</button></div>
+      <div class="filter-bar"><div class="ftab active" onclick="setFilter('team__boseul__shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('team__boseul__shopee','high',this)">높음</div><div class="ftab" onclick="setFilter('team__boseul__shopee','mid',this)">중간</div><div class="ftab" onclick="setFilter('team__boseul__shopee','low',this)">낮음</div><div class="ftab" onclick="setFilter('team__boseul__shopee','done',this)">완료</div></div>
+      <div id="team__boseul__shopee-list"></div>
+    </div>
+
   </main>
 </div>
 
@@ -942,8 +1015,27 @@
 
 <script>
   /* ── 상수 ── */
-  const SCOPES = ['personal','neaf','amazon','shopee','tiktok','performa','pd','md','etc'];
-  const CAT_LABELS = {personal:'개인',neaf:'Neaf',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타'};
+  const OWN_SCOPES = ['personal','neaf','amazon','shopee','tiktok','performa','pd','md','etc'];
+  const TEAM_SCOPES = [
+    'team__ongicheol__tiktok-us',
+    'team__ongicheol__tiktok-uk',
+    'team__ongicheol__shopify',
+    'team__ongicheol__etc',
+    'team__boseul__shopee-sg',
+    'team__boseul__shopee-my',
+    'team__boseul__shopee'
+  ];
+  const SCOPES = [...OWN_SCOPES, ...TEAM_SCOPES];
+  const CAT_LABELS = {
+    personal:'개인',neaf:'Neaf',amazon:'아마존',shopee:'쇼피',tiktok:'틱톡',performa:'퍼포마',pd:'PD',md:'MD',etc:'기타',
+    'team__ongicheol__tiktok-us':'온기철 · Tiktok US',
+    'team__ongicheol__tiktok-uk':'온기철 · Tiktok UK',
+    'team__ongicheol__shopify'  :'온기철 · Shopify',
+    'team__ongicheol__etc'      :'온기철 · 기타',
+    'team__boseul__shopee-sg'   :'이보슬 · Shopee SG',
+    'team__boseul__shopee-my'   :'이보슬 · Shopee MY',
+    'team__boseul__shopee'      :'이보슬 · Shopee'
+  };
   const CAT_COLORS = {
     personal:{bg:'#E1F5EE',color:'#0F6E56'},
     neaf:    {bg:'#E8F5E0',color:'#3B6D11'},
@@ -953,9 +1045,25 @@
     performa:{bg:'#E6F1FB',color:'#185FA5'},
     pd:      {bg:'#E1F5EE',color:'#0F6E56'},
     md:      {bg:'#FBEAF0',color:'#993556'},
-    etc:     {bg:'#EEEDE8',color:'#5C5A53'}
+    etc:     {bg:'#EEEDE8',color:'#5C5A53'},
+    'team__ongicheol__tiktok-us':{bg:'#EEEDFE',color:'#534AB7'},
+    'team__ongicheol__tiktok-uk':{bg:'#E6F1FB',color:'#185FA5'},
+    'team__ongicheol__shopify'  :{bg:'#E1F5EE',color:'#0F6E56'},
+    'team__ongicheol__etc'      :{bg:'#EEEDE8',color:'#5C5A53'},
+    'team__boseul__shopee-sg'   :{bg:'#FAECE7',color:'#993C1D'},
+    'team__boseul__shopee-my'   :{bg:'#FFF0DA',color:'#A0570F'},
+    'team__boseul__shopee'      :{bg:'#F5DDD0',color:'#8B3414'}
   };
   const COMPANY_CATS = ['amazon','shopee','tiktok','performa','pd','md','etc'];
+
+  /* ── 저장소 키 매핑 ── */
+  function storageKey(scope) {
+    if (scope.startsWith('team__')) {
+      const parts = scope.split('__'); // ['team', member, cat]
+      return parts[1] + '_todos_' + parts[2];
+    }
+    return 'ethan_todos_' + scope;
+  }
   const priLabel = {high:'높음', mid:'중간', low:'낮음'};
 
   /* ── 상태 ── */
@@ -973,15 +1081,15 @@
 
   /* ── 저장/로드 + 마이그레이션 ── */
   function save(scope) {
-    try { localStorage.setItem('ethan_todos_' + scope, JSON.stringify(data[scope])); } catch(e) {}
+    try { localStorage.setItem(storageKey(scope), JSON.stringify(data[scope])); } catch(e) {}
   }
   function loadAll() {
     SCOPES.forEach(s => {
       try {
-        const raw = localStorage.getItem('ethan_todos_' + s);
+        const raw = localStorage.getItem(storageKey(s));
         if (raw) data[s] = JSON.parse(raw);
       } catch(e) { data[s] = []; }
-      // 마이그레이션: 누락 필드 채우기 + 1회 백업
+      // 마이그레이션: 누락 필드 채우기 + 본인 데이터에 한해 1회 백업
       let migrated = false;
       data[s].forEach((t, i) => {
         if (t.due === undefined) { t.due = null; migrated = true; }
@@ -990,13 +1098,15 @@
         if (t.completedAt === undefined) { t.completedAt = null; migrated = true; }
       });
       if (migrated) {
-        try {
-          const bk = 'ethan_todos_' + s + '_backup_v1';
-          if (!localStorage.getItem(bk)) {
-            const orig = localStorage.getItem('ethan_todos_' + s);
-            if (orig) localStorage.setItem(bk, orig);
-          }
-        } catch(e) {}
+        if (!s.startsWith('team__')) {
+          try {
+            const bk = 'ethan_todos_' + s + '_backup_v1';
+            if (!localStorage.getItem(bk)) {
+              const orig = localStorage.getItem('ethan_todos_' + s);
+              if (orig) localStorage.setItem(bk, orig);
+            }
+          } catch(e) {}
+        }
         save(s);
       }
     });
@@ -1141,14 +1251,33 @@
   function toggleGroup(id) {
     const c = document.getElementById('group-' + id);
     const v = document.getElementById('chev-' + id);
+    if (!c || !v) return;
     const o = v.classList.contains('open');
     c.style.maxHeight = o ? '0' : c.scrollHeight + 'px';
     v.classList.toggle('open', !o);
+    // 조상 그룹의 maxHeight 재계산 (중첩 드롭다운 대응)
+    requestAnimationFrame(() => {
+      let parent = c.parentElement;
+      while (parent) {
+        if (parent.classList && parent.classList.contains('sb-children')) {
+          if (parent.style.maxHeight !== '0px') {
+            parent.style.maxHeight = parent.scrollHeight + 'px';
+          }
+        }
+        parent = parent.parentElement;
+      }
+    });
   }
   function initGroups() {
-    ['personal','company','team'].forEach(id => {
+    // 자식 그룹부터 부모 순으로 (안쪽부터) 펼침 처리
+    ['ongicheol','boseul','personal','company','team'].forEach(id => {
       const el = document.getElementById('group-' + id);
-      el.style.maxHeight = el.scrollHeight + 'px';
+      if (el) el.style.maxHeight = el.scrollHeight + 'px';
+    });
+    // 외부 그룹 한 번 더 (중첩 자식이 펼쳐진 후 높이 재계산)
+    ['team','personal','company'].forEach(id => {
+      const el = document.getElementById('group-' + id);
+      if (el) el.style.maxHeight = el.scrollHeight + 'px';
     });
   }
   function goPage(id, el) {
@@ -1156,13 +1285,6 @@
     document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     if (el) el.classList.add('active');
-  }
-
-  /* ── 팀원 대시보드 이동 (관리자 모드, 로그인 우회) ── */
-  function openTeamMember(name) {
-    // 일회용 bypass 플래그 → 팀원 페이지가 init 시 발견하면 로그인 건너뜀
-    try { localStorage.setItem('team_bypass_' + name, '1'); } catch(e) {}
-    window.open(name + '.html', '_blank');
   }
 
   /* ── 드래그 정렬 ── */
@@ -1403,9 +1525,9 @@
 
   /* ── 대시보드 ── */
   function renderDashboard() {
-    // 요약
+    // 요약 (이단님 본인 데이터만)
     let total=0, done=0, prog=0, high=0, soon=0;
-    SCOPES.forEach(s => {
+    OWN_SCOPES.forEach(s => {
       data[s].forEach(t => {
         total++;
         if (t.done) done++;
@@ -1423,11 +1545,11 @@
     document.getElementById('d-high').textContent  = high;
     document.getElementById('d-soon').textContent  = soon;
 
-    // 오늘 할 일: 마감일이 오늘이거나 지난 미완료
+    // 오늘 할 일: 마감일이 오늘이거나 지난 미완료 (이단님 본인 데이터만)
     const todayList = document.getElementById('d-today');
     todayList.innerHTML = '';
     const todays = [];
-    SCOPES.forEach(s => {
+    OWN_SCOPES.forEach(s => {
       data[s].forEach(t => {
         if (t.done) return;
         const d = dDay(t.due);
@@ -1452,10 +1574,10 @@
       });
     }
 
-    // 카테고리별 진행률
+    // 카테고리별 진행률 (이단님 본인 데이터만)
     const prWrap = document.getElementById('d-progress');
     prWrap.innerHTML = '';
-    SCOPES.forEach(s => {
+    OWN_SCOPES.forEach(s => {
       const total = data[s].length;
       const done  = data[s].filter(t => t.done).length;
       const pct = total ? Math.round(done / total * 100) : 0;
@@ -1485,7 +1607,7 @@
       const lbl = `${d.getMonth()+1}/${d.getDate()}`;
       days.push({ key, lbl, count: 0 });
     }
-    SCOPES.forEach(s => {
+    OWN_SCOPES.forEach(s => {
       data[s].forEach(t => {
         if (!t.completedAt) return;
         const day = days.find(d => d.key === t.completedAt);
