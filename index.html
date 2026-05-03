@@ -1880,7 +1880,7 @@
     document.getElementById('auth-pw2-field').style.display = isCreating ? '' : 'none';
     document.getElementById('auth-foot').innerHTML = isCreating
       ? '아이디와 비밀번호를 설정하면 다음부터 입력해야 합니다.'
-      : '비밀번호를 잊으셨나요? <a onclick="resetAuth()">초기화 (모든 데이터 삭제)</a>';
+      : '비밀번호를 잊으셨나요? <a onclick="resetAuth()">계정 재설정</a> (할 일은 유지됨)';
     document.getElementById('auth-id').value = '';
     document.getElementById('auth-pw').value = '';
     document.getElementById('auth-pw2').value = '';
@@ -1932,7 +1932,14 @@
   }
 
   function resetAuth() {
-    if (!confirm('정말 초기화하시겠습니까?\n계정과 모든 할 일 데이터가 삭제됩니다.')) return;
+    if (!confirm('계정을 재설정하시겠습니까?\n비밀번호는 초기화되지만 할 일 데이터는 그대로 유지됩니다.')) return;
+    localStorage.removeItem(AUTH_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
+    setupAuth();
+  }
+  // 모든 데이터까지 삭제하려면 콘솔에서: resetAll()
+  function resetAll() {
+    if (!confirm('정말 모두 초기화? 계정 + 모든 할 일이 삭제됩니다.')) return;
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
       if (k && k.startsWith('ethan_')) localStorage.removeItem(k);
