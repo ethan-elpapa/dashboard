@@ -1685,8 +1685,7 @@
         titlesHtml += `<div class="cal-cell-title ${priCls}">${escapeHtml(t.text)}</div>`;
       });
       if (items.length > 3) titlesHtml += `<div class="cal-cell-more">+${items.length - 3}</div>`;
-      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('
-');
+      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('\n');
       html += `<div class="${cls.join(' ')}" title="${escapeHtml(tooltip)}">${day}<div class="cal-cell-titles">${titlesHtml}</div></div>`;
     }
     html += `</div>`;
@@ -2026,8 +2025,7 @@
         titlesHtml += `<div class="cal-cell-title ${priCls}">${escapeHtml(t.text)}</div>`;
       });
       if (items.length > 3) titlesHtml += `<div class="cal-cell-more">+${items.length - 3}</div>`;
-      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('
-');
+      const tooltip = items.map(t => (t.status === 'done' ? '✓ ' : '') + t.text).join('\n');
       html += `<div class="${cls.join(' ')}" title="${escapeHtml(tooltip)}">${day}<div class="cal-cell-titles">${titlesHtml}</div></div>`;
     }
     html += `</div>`;
