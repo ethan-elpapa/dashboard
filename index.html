@@ -731,12 +731,12 @@
       </svg>
     </div>
     <div id="group-team" class="sb-children">
-      <div class="sb-item sub" onclick="window.open('ongicheol.html','_blank')" title="새 탭에서 열기">
+      <div class="sb-item sub" onclick="openTeamMember('ongicheol')" title="새 탭에서 열기 (관리자 모드)">
         <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
         온기철
         <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="sb-item sub" onclick="window.open('boseul.html','_blank')" title="새 탭에서 열기">
+      <div class="sb-item sub" onclick="openTeamMember('boseul')" title="새 탭에서 열기 (관리자 모드)">
         <svg class="sb-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
         이보슬
         <svg style="width:10px;height:10px;margin-left:auto;opacity:.5" viewBox="0 0 12 12" fill="none"><path d="M5 3h4v4M9 3L4 8M3 5v4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1156,6 +1156,13 @@
     document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     if (el) el.classList.add('active');
+  }
+
+  /* ── 팀원 대시보드 이동 (관리자 모드, 로그인 우회) ── */
+  function openTeamMember(name) {
+    // 일회용 bypass 플래그 → 팀원 페이지가 init 시 발견하면 로그인 건너뜀
+    try { localStorage.setItem('team_bypass_' + name, '1'); } catch(e) {}
+    window.open(name + '.html', '_blank');
   }
 
   /* ── 드래그 정렬 ── */
