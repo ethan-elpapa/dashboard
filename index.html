@@ -330,7 +330,7 @@
     /* ── TODO ITEMS ── */
     .todo-item {
       display: grid;
-      grid-template-columns: auto auto 1fr 1fr 1fr 1fr;
+      grid-template-columns: auto auto 1fr 1fr 1fr 1fr 1fr;
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
@@ -347,7 +347,7 @@
       gap: 6px;
       justify-content: flex-end;
       min-width: 0;
-      grid-column: 6;
+      grid-column: 7;
     }
     .todo-item:hover { box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .todo-item.done-item { opacity: .5; }
@@ -669,7 +669,7 @@
     .status-badge.done     { background: #E1F5EE; color: #0F6E56; }
 
     /* ── 진행/이슈 줄 ── */
-    .todo-progress, .todo-issue {
+    .todo-progress, .todo-issue, .todo-note {
       font-size: 13px;
       color: var(--text-secondary);
       white-space: nowrap;
@@ -679,6 +679,7 @@
       flex: 1 1 auto;
     }
     .todo-issue { color: #A32D2D; }
+    .todo-note { color: #5C5A53; }
 
     /* ── 모달 별 입력 ── */
     .star-input {
@@ -1028,6 +1029,7 @@
         <select id="p-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select>
         <input type="text" id="p-progress" placeholder="진행" class="add-extra">
         <input type="text" id="p-issue" placeholder="이슈" class="add-extra">
+        <input type="text" id="p-note" placeholder="비고" class="add-extra">
         <button class="add-btn" onclick="addTodo('personal')">+ 추가</button>
       </div>
       <div class="filter-bar">
@@ -1043,7 +1045,7 @@
     <!-- Neaf -->
     <div id="page-neaf" class="page">
       <div class="top-bar"><span class="page-title">Neaf</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">개인 업무</span></div>
-      <div class="add-bar"><input type="text" id="neaf-input" placeholder="새 할 일 입력..."><input type="date" id="neaf-due"><select id="neaf-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="neaf-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="neaf-progress" placeholder="진행" class="add-extra"><input type="text" id="neaf-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('neaf')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="neaf-input" placeholder="새 할 일 입력..."><input type="date" id="neaf-due"><select id="neaf-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="neaf-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="neaf-progress" placeholder="진행" class="add-extra"><input type="text" id="neaf-issue" placeholder="이슈" class="add-extra"><input type="text" id="neaf-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('neaf')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('neaf','all',this)">전체</div><div class="ftab" onclick="setFilter('neaf','pending',this)">대기중</div><div class="ftab" onclick="setFilter('neaf','progress',this)">진행중</div><div class="ftab" onclick="setFilter('neaf','hold',this)">보류</div><div class="ftab" onclick="setFilter('neaf','done',this)">완료</div></div>
       <div id="neaf-list"></div>
     </div>
@@ -1051,7 +1053,7 @@
     <!-- AI -->
     <div id="page-ai" class="page">
       <div class="top-bar"><span class="page-title">AI</span><span class="page-tag" style="background:#EEE2F8;color:#5C2D91">개인 업무</span></div>
-      <div class="add-bar"><input type="text" id="ai-input" placeholder="새 할 일 입력..."><input type="date" id="ai-due"><select id="ai-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="ai-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="ai-progress" placeholder="진행" class="add-extra"><input type="text" id="ai-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('ai')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="ai-input" placeholder="새 할 일 입력..."><input type="date" id="ai-due"><select id="ai-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="ai-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="ai-progress" placeholder="진행" class="add-extra"><input type="text" id="ai-issue" placeholder="이슈" class="add-extra"><input type="text" id="ai-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('ai')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('ai','all',this)">전체</div><div class="ftab" onclick="setFilter('ai','pending',this)">대기중</div><div class="ftab" onclick="setFilter('ai','progress',this)">진행중</div><div class="ftab" onclick="setFilter('ai','hold',this)">보류</div><div class="ftab" onclick="setFilter('ai','done',this)">완료</div></div>
       <div id="ai-list"></div>
     </div>
@@ -1059,7 +1061,7 @@
     <!-- 전자책 -->
     <div id="page-ebook" class="page">
       <div class="top-bar"><span class="page-title">전자책</span><span class="page-tag" style="background:#F5E6CC;color:#7A5A0F">개인 업무</span></div>
-      <div class="add-bar"><input type="text" id="ebook-input" placeholder="새 할 일 입력..."><input type="date" id="ebook-due"><select id="ebook-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="ebook-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="ebook-progress" placeholder="진행" class="add-extra"><input type="text" id="ebook-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('ebook')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="ebook-input" placeholder="새 할 일 입력..."><input type="date" id="ebook-due"><select id="ebook-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="ebook-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="ebook-progress" placeholder="진행" class="add-extra"><input type="text" id="ebook-issue" placeholder="이슈" class="add-extra"><input type="text" id="ebook-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('ebook')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('ebook','all',this)">전체</div><div class="ftab" onclick="setFilter('ebook','pending',this)">대기중</div><div class="ftab" onclick="setFilter('ebook','progress',this)">진행중</div><div class="ftab" onclick="setFilter('ebook','hold',this)">보류</div><div class="ftab" onclick="setFilter('ebook','done',this)">완료</div></div>
       <div id="ebook-list"></div>
     </div>
@@ -1083,7 +1085,7 @@
     <!-- 아마존 -->
     <div id="page-amazon" class="page">
       <div class="top-bar"><span class="page-title">아마존</span><span class="page-tag" style="background:#FAEEDA;color:#854F0B">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="amazon-input" placeholder="새 할 일 입력..."><input type="date" id="amazon-due"><select id="amazon-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="amazon-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="amazon-progress" placeholder="진행" class="add-extra"><input type="text" id="amazon-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('amazon')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="amazon-input" placeholder="새 할 일 입력..."><input type="date" id="amazon-due"><select id="amazon-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="amazon-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="amazon-progress" placeholder="진행" class="add-extra"><input type="text" id="amazon-issue" placeholder="이슈" class="add-extra"><input type="text" id="amazon-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('amazon')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('amazon','all',this)">전체</div><div class="ftab" onclick="setFilter('amazon','pending',this)">대기중</div><div class="ftab" onclick="setFilter('amazon','progress',this)">진행중</div><div class="ftab" onclick="setFilter('amazon','hold',this)">보류</div><div class="ftab" onclick="setFilter('amazon','done',this)">완료</div></div>
       <div id="amazon-list"></div>
     </div>
@@ -1091,7 +1093,7 @@
     <!-- 쇼피 -->
     <div id="page-shopee" class="page">
       <div class="top-bar"><span class="page-title">쇼피</span><span class="page-tag" style="background:#FAECE7;color:#993C1D">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="shopee-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="shopee-progress" placeholder="진행" class="add-extra"><input type="text" id="shopee-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="shopee-input" placeholder="새 할 일 입력..."><input type="date" id="shopee-due"><select id="shopee-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="shopee-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="shopee-progress" placeholder="진행" class="add-extra"><input type="text" id="shopee-issue" placeholder="이슈" class="add-extra"><input type="text" id="shopee-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('shopee')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('shopee','all',this)">전체</div><div class="ftab" onclick="setFilter('shopee','pending',this)">대기중</div><div class="ftab" onclick="setFilter('shopee','progress',this)">진행중</div><div class="ftab" onclick="setFilter('shopee','hold',this)">보류</div><div class="ftab" onclick="setFilter('shopee','done',this)">완료</div></div>
       <div id="shopee-list"></div>
     </div>
@@ -1099,7 +1101,7 @@
     <!-- 틱톡 -->
     <div id="page-tiktok" class="page">
       <div class="top-bar"><span class="page-title">틱톡</span><span class="page-tag" style="background:#EEEDFE;color:#534AB7">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="tiktok-input" placeholder="새 할 일 입력..."><input type="date" id="tiktok-due"><select id="tiktok-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="tiktok-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="tiktok-progress" placeholder="진행" class="add-extra"><input type="text" id="tiktok-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('tiktok')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="tiktok-input" placeholder="새 할 일 입력..."><input type="date" id="tiktok-due"><select id="tiktok-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="tiktok-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="tiktok-progress" placeholder="진행" class="add-extra"><input type="text" id="tiktok-issue" placeholder="이슈" class="add-extra"><input type="text" id="tiktok-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('tiktok')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('tiktok','all',this)">전체</div><div class="ftab" onclick="setFilter('tiktok','pending',this)">대기중</div><div class="ftab" onclick="setFilter('tiktok','progress',this)">진행중</div><div class="ftab" onclick="setFilter('tiktok','hold',this)">보류</div><div class="ftab" onclick="setFilter('tiktok','done',this)">완료</div></div>
       <div id="tiktok-list"></div>
     </div>
@@ -1107,7 +1109,7 @@
     <!-- 퍼포마 -->
     <div id="page-performa" class="page">
       <div class="top-bar"><span class="page-title">퍼포마</span><span class="page-tag" style="background:#E6F1FB;color:#185FA5">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="performa-input" placeholder="새 할 일 입력..."><input type="date" id="performa-due"><select id="performa-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="performa-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="performa-progress" placeholder="진행" class="add-extra"><input type="text" id="performa-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('performa')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="performa-input" placeholder="새 할 일 입력..."><input type="date" id="performa-due"><select id="performa-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="performa-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="performa-progress" placeholder="진행" class="add-extra"><input type="text" id="performa-issue" placeholder="이슈" class="add-extra"><input type="text" id="performa-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('performa')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('performa','all',this)">전체</div><div class="ftab" onclick="setFilter('performa','pending',this)">대기중</div><div class="ftab" onclick="setFilter('performa','progress',this)">진행중</div><div class="ftab" onclick="setFilter('performa','hold',this)">보류</div><div class="ftab" onclick="setFilter('performa','done',this)">완료</div></div>
       <div id="performa-list"></div>
     </div>
@@ -1115,7 +1117,7 @@
     <!-- PD -->
     <div id="page-pd" class="page">
       <div class="top-bar"><span class="page-title">PD</span><span class="page-tag" style="background:#E1F5EE;color:#0F6E56">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="pd-input" placeholder="새 할 일 입력..."><input type="date" id="pd-due"><select id="pd-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="pd-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="pd-progress" placeholder="진행" class="add-extra"><input type="text" id="pd-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('pd')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="pd-input" placeholder="새 할 일 입력..."><input type="date" id="pd-due"><select id="pd-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="pd-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="pd-progress" placeholder="진행" class="add-extra"><input type="text" id="pd-issue" placeholder="이슈" class="add-extra"><input type="text" id="pd-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('pd')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('pd','all',this)">전체</div><div class="ftab" onclick="setFilter('pd','pending',this)">대기중</div><div class="ftab" onclick="setFilter('pd','progress',this)">진행중</div><div class="ftab" onclick="setFilter('pd','hold',this)">보류</div><div class="ftab" onclick="setFilter('pd','done',this)">완료</div></div>
       <div id="pd-list"></div>
     </div>
@@ -1123,7 +1125,7 @@
     <!-- MD -->
     <div id="page-md" class="page">
       <div class="top-bar"><span class="page-title">MD</span><span class="page-tag" style="background:#FBEAF0;color:#993556">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="md-input" placeholder="새 할 일 입력..."><input type="date" id="md-due"><select id="md-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="md-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="md-progress" placeholder="진행" class="add-extra"><input type="text" id="md-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('md')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="md-input" placeholder="새 할 일 입력..."><input type="date" id="md-due"><select id="md-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="md-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="md-progress" placeholder="진행" class="add-extra"><input type="text" id="md-issue" placeholder="이슈" class="add-extra"><input type="text" id="md-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('md')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('md','all',this)">전체</div><div class="ftab" onclick="setFilter('md','pending',this)">대기중</div><div class="ftab" onclick="setFilter('md','progress',this)">진행중</div><div class="ftab" onclick="setFilter('md','hold',this)">보류</div><div class="ftab" onclick="setFilter('md','done',this)">완료</div></div>
       <div id="md-list"></div>
     </div>
@@ -1131,7 +1133,7 @@
     <!-- 기타 -->
     <div id="page-etc" class="page">
       <div class="top-bar"><span class="page-title">기타</span><span class="page-tag" style="background:#EEEDE8;color:#5C5A53">회사 업무</span></div>
-      <div class="add-bar"><input type="text" id="etc-input" placeholder="새 할 일 입력..."><input type="date" id="etc-due"><select id="etc-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="etc-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="etc-progress" placeholder="진행" class="add-extra"><input type="text" id="etc-issue" placeholder="이슈" class="add-extra"><button class="add-btn" onclick="addTodo('etc')">+ 추가</button></div>
+      <div class="add-bar"><input type="text" id="etc-input" placeholder="새 할 일 입력..."><input type="date" id="etc-due"><select id="etc-stars"><option value="1">★ 1</option><option value="2">★★ 2</option><option value="3" selected>★★★ 3</option><option value="4">★★★★ 4</option><option value="5">★★★★★ 5</option></select><select id="etc-status"><option value="pending" selected>대기중</option><option value="progress">진행중</option><option value="hold">보류</option><option value="done">완료</option></select><input type="text" id="etc-progress" placeholder="진행" class="add-extra"><input type="text" id="etc-issue" placeholder="이슈" class="add-extra"><input type="text" id="etc-note" placeholder="비고" class="add-extra"><button class="add-btn" onclick="addTodo('etc')">+ 추가</button></div>
       <div class="filter-bar"><div class="ftab active" onclick="setFilter('etc','all',this)">전체</div><div class="ftab" onclick="setFilter('etc','pending',this)">대기중</div><div class="ftab" onclick="setFilter('etc','progress',this)">진행중</div><div class="ftab" onclick="setFilter('etc','hold',this)">보류</div><div class="ftab" onclick="setFilter('etc','done',this)">완료</div></div>
       <div id="etc-list"></div>
     </div>
@@ -1171,6 +1173,10 @@
     <div class="modal-field">
       <label>이슈</label>
       <textarea id="edit-issue" placeholder="문제나 이슈 사항..."></textarea>
+    </div>
+    <div class="modal-field">
+      <label>비고</label>
+      <textarea id="edit-note" placeholder="기타 메모..."></textarea>
     </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeModal()">취소</button>
@@ -1246,6 +1252,7 @@
         }
         if (t.progress === undefined) { t.progress = t.memo || ''; migrated = true; }
         if (t.issue === undefined) { t.issue = ''; migrated = true; }
+        if (t.note === undefined) { t.note = ''; migrated = true; }
       });
       if (migrated) {
         try {
@@ -1301,10 +1308,11 @@
   const statusId   = s => s === 'personal' ? 'p-status'   : s + '-status';
   const progressId = s => s === 'personal' ? 'p-progress' : s + '-progress';
   const issueId    = s => s === 'personal' ? 'p-issue'    : s + '-issue';
+  const noteId     = s => s === 'personal' ? 'p-note'     : s + '-note';
 
   /* ── 엔터 키 바인딩 ── */
   SCOPES.forEach(s => {
-    [inputId(s), progressId(s), issueId(s)].forEach(id => {
+    [inputId(s), progressId(s), issueId(s), noteId(s)].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(s); });
     });
@@ -1320,10 +1328,12 @@
     const statusEl   = document.getElementById(statusId(scope));
     const progressEl = document.getElementById(progressId(scope));
     const issueEl    = document.getElementById(issueId(scope));
+    const noteEl     = document.getElementById(noteId(scope));
     const stars    = starsEl    ? Number(starsEl.value)        : 3;
     const status   = statusEl   ? statusEl.value               : 'pending';
     const progress = progressEl ? progressEl.value.trim()      : '';
     const issue    = issueEl    ? issueEl.value.trim()         : '';
+    const note     = noteEl     ? noteEl.value.trim()          : '';
     const isDone = status === 'done';
     const maxOrder = data[scope].reduce((m,t) => Math.max(m, t.order || 0), -1);
     data[scope].push({
@@ -1339,12 +1349,14 @@
       stars,
       status,
       progress,
-      issue
+      issue,
+      note
     });
     input.value = '';
     document.getElementById(dueId(scope)).value = '';
     if (progressEl) progressEl.value = '';
     if (issueEl) issueEl.value = '';
+    if (noteEl) noteEl.value = '';
     save(scope);
     afterChange(scope);
   }
@@ -1413,6 +1425,7 @@
     document.getElementById('edit-text').value = t.text;
     document.getElementById('edit-progress').value = t.progress || '';
     document.getElementById('edit-issue').value = t.issue || '';
+    document.getElementById('edit-note').value = t.note || '';
     document.getElementById('edit-status').value = t.status || 'pending';
     document.getElementById('edit-due').value = t.due ? dotToISO(t.due) : '';
     renderStarInput(t.stars || 3);
@@ -1434,6 +1447,7 @@
     t.stars    = Number(document.getElementById('edit-stars').dataset.value || 3);
     t.progress = document.getElementById('edit-progress').value.trim();
     t.issue    = document.getElementById('edit-issue').value.trim();
+    t.note     = document.getElementById('edit-note').value.trim();
     const dueRaw = document.getElementById('edit-due').value;
     t.due = dueRaw ? isoToDot(dueRaw) : null;
     // 상태 변경: 완료/완료해제 시 done, completedAt 동기화
@@ -1639,6 +1653,7 @@
     div.onclick = (e) => openEdit(scope, t.id, e);
     const progressContent = t.progress ? `진행: ${escapeHtml(t.progress)}` : '';
     const issueContent    = t.issue    ? `⚠ ${escapeHtml(t.issue)}` : '';
+    const noteContent     = t.note     ? `${escapeHtml(t.note)}` : '';
     div.innerHTML = `
       <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleDone('${scope}',${t.id},event)" title="완료 토글">
         <svg class="check-icon" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1647,6 +1662,7 @@
       <div class="todo-text">${escapeHtml(t.text)}</div>
       <div class="todo-progress">${progressContent}</div>
       <div class="todo-issue">${issueContent}</div>
+      <div class="todo-note">${noteContent}</div>
       <div class="todo-meta">
         <span class="status-badge ${status}" onclick="cycleStatus('${scope}',${t.id},event)" title="클릭으로 상태 변경">${STATUS_LABEL[status]}</span>
         ${t.due && !isDone ? ddayBadge(t.due) : ''}
