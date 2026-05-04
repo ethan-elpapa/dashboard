@@ -1859,13 +1859,15 @@
       todays.slice(0, 8).forEach(t => {
         const c = CAT_COLORS[t.scope];
         const div = buildTodoItem(t, t.scope, false);
-        // 카테고리 배지를 todo-text 옆에 추가
-        const body = div.querySelector('.todo-body');
-        const cat = document.createElement('span');
-        cat.className = 'cat-badge';
-        cat.style.cssText = `background:${c.bg};color:${c.color};margin-right:6px;display:inline-block;vertical-align:middle`;
-        cat.textContent = CAT_LABELS[t.scope];
-        body.querySelector('.todo-text').prepend(cat);
+        // 카테고리 배지를 todo-text 앞에 추가 (4단 그리드 구조 대응)
+        const titleEl = div.querySelector('.todo-text');
+        if (titleEl) {
+          const cat = document.createElement('span');
+          cat.className = 'cat-badge';
+          cat.style.cssText = `background:${c.bg};color:${c.color};margin-right:6px;display:inline-block;vertical-align:middle`;
+          cat.textContent = CAT_LABELS[t.scope];
+          titleEl.prepend(cat);
+        }
         todayList.appendChild(div);
       });
     }
