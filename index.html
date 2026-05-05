@@ -546,22 +546,57 @@
     .weekly-chart .label { font-size: 10px; fill: var(--text-secondary); font-family: var(--font); }
     .weekly-chart .value { font-size: 10px; fill: var(--text-primary); font-family: var(--font); font-weight: 600; }
 
+    /* 햄버거 버튼 (모바일에서만 보임) */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      background: #FDEBD3;
+      border: 1px solid rgba(90,55,15,.2);
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      cursor: pointer;
+      font-size: 18px;
+      color: #4A2A05;
+      font-family: var(--font);
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+
     /* ── 모바일 반응형 (768px 이하) ── */
     @media (max-width: 768px) {
-      .layout { flex-direction: column; }
+      .mobile-menu-btn { display: flex; }
+
+      /* 사이드바: 화면 밖으로 슬라이드, 햄버거 클릭 시 등장 */
       .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        top: auto;
-        max-height: none;
-        border-right: none;
-        border-bottom: 0.5px solid var(--orange-border);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 240px;
+        max-width: 80vw;
+        height: 100vh;
+        max-height: 100vh;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        z-index: 200;
+        box-shadow: 2px 0 14px rgba(0,0,0,.15);
       }
-      .sidebar .sb-spacer { display: none; }
-      .sb-children { max-height: none !important; }
-      .main { padding: 1rem 0.75rem; }
-      .top-bar { margin-bottom: 0.75rem; }
+      body.menu-open .sidebar { transform: translateX(0); }
+      body.menu-open::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 150;
+        cursor: pointer;
+      }
+
+      .main { width: 100%; padding: 60px 0.75rem 1rem; }
+      .top-bar { margin-bottom: 0.75rem; padding-right: 50px; }
 
       /* 통계 카드 — 2열로 */
       .stats { grid-template-columns: repeat(2, 1fr); }
@@ -901,6 +936,9 @@
   </style>
 </head>
 <body class="locked">
+
+<!-- 모바일 햄버거 메뉴 버튼 -->
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()" title="메뉴">☰</button>
 
 <!-- ── 인증 화면 ── -->
 <div class="auth-overlay">
@@ -1571,7 +1609,23 @@
     document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     if (el) el.classList.add('active');
+    // 모바일에서 페이지 이동 시 메뉴 자동 닫기
+    document.body.classList.remove('menu-open');
   }
+
+  function toggleMobileMenu() {
+    document.body.classList.toggle('menu-open');
+  }
+  // 오버레이(::before) 클릭으로 메뉴 닫기
+  document.addEventListener('click', e => {
+    if (document.body.classList.contains('menu-open')) {
+      const sidebar = document.querySelector('.sidebar');
+      const btn = document.querySelector('.mobile-menu-btn');
+      if (sidebar && !sidebar.contains(e.target) && btn && !btn.contains(e.target)) {
+        document.body.classList.remove('menu-open');
+      }
+    }
+  });
 
   /* ── 드래그 정렬 ── */
   function onDragStart(ev, scope, id) {
