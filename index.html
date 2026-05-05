@@ -546,6 +546,71 @@
     .weekly-chart .label { font-size: 10px; fill: var(--text-secondary); font-family: var(--font); }
     .weekly-chart .value { font-size: 10px; fill: var(--text-primary); font-family: var(--font); font-weight: 600; }
 
+    /* ── 모바일 반응형 (768px 이하) ── */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: auto;
+        max-height: none;
+        border-right: none;
+        border-bottom: 0.5px solid var(--orange-border);
+      }
+      .sidebar .sb-spacer { display: none; }
+      .sb-children { max-height: none !important; }
+      .main { padding: 1rem 0.75rem; }
+      .top-bar { margin-bottom: 0.75rem; }
+
+      /* 통계 카드 — 2열로 */
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stats.five { grid-template-columns: repeat(2, 1fr); }
+
+      /* 대시보드 그리드 — 1열로 */
+      .dash-grid { grid-template-columns: 1fr; }
+
+      /* 할 일 항목 — 세로 스택 */
+      .todo-item {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 12px;
+      }
+      .todo-item > .check-btn { align-self: flex-start; }
+      .todo-text { font-weight: 600; }
+      .todo-progress:empty,
+      .todo-issue:empty,
+      .todo-note:empty { display: none; }
+      .todo-meta {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .del-btn { opacity: 1 !important; margin-left: auto; }
+
+      /* add-bar — 입력 칸을 세로로 가지런히 */
+      .add-bar input[type=text],
+      .add-bar input[type=text].add-extra {
+        flex: 1 1 100%;
+        min-width: 0;
+      }
+      .add-bar input[type=date],
+      .add-bar select { flex: 1 1 calc(50% - 4px); }
+      .add-bar .add-btn { flex: 1 1 100%; }
+
+      /* 캘린더 — 셀 좀 더 컴팩트 */
+      .cal-cell { min-height: 60px; padding: 3px 1px; }
+      .cal-cell-title { font-size: 8px; padding: 1px 2px; }
+
+      /* 모달 — 모바일 패딩 */
+      .modal { padding: 16px; }
+
+      /* 별 입력 — 모바일에서도 잘 보이게 */
+      .stars-static { font-size: 12px; }
+    }
+
     /* 검색 결과 */
     .search-empty {
       font-size: 13px;
